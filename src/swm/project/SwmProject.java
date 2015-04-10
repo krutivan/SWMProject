@@ -18,8 +18,9 @@ public class SwmProject {
      */
     public static void main(String[] args) {
         LoadDataToDb ldb = new LoadDataToDb();
-       ldb.loadUserDataToDb();
         
+        //comment
+       ldb.loadMovieDataToDb();
     }
     
 }
