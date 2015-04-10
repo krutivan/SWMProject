@@ -10,5 +10,6 @@ package swm.project;
  * @author Kruti
  */
 public final class Consts {
-    public static final String DBNAME= "mydb";
+    public static final String DBNAME= "swmdb";
+    public static final String UDATA="uData";
 }
