@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package swm.project.loadDataToDb;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
