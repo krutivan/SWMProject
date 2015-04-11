@@ -109,18 +109,19 @@ public class LoadDataToDb {
                 br = new BufferedReader(new InputStreamReader(fis));
                 String inputLine;
                 int c=1;
-                while(((inputLine = br.readLine())!=null) && c<5)
+                while(((inputLine = br.readLine())!=null))
                 {
                     String [] fields = inputLine.split("@");
-                    for (String field : fields) {
+                    /*for (String field : fields) {
                         System.out.print(field + "____");    
                     }
-                    System.out.println("");
+                    System.out.println("");*/
                  
-                    addMovieNames(c,fields[1], movieNamesCollection);
-                    addMovieActors(c, Arrays.asList(fields[4]), movieActorsCollection);
-                    c++;
-                    
+                    //addMovieNames(c,fields[1], movieNamesCollection);
+                    //addMovieActors(c, Arrays.asList(fields[4]), movieActorsCollection);
+                    addMovieOtherFeatures(c,fields[2],fields[3],(fields[5].split(",")),movieOtherCollection);
+                    //addMovieGenre(c,(fields[5].split(",")),movieGenreCollection);
+                    c++;                  
                    
                 }
             } catch (FileNotFoundException ex) {
@@ -144,17 +145,25 @@ public class LoadDataToDb {
         movieNamesCollection.insertOne(d);
     }
     
-    private void addMovieOtherFeatures(int id, String director, MongoCollection<Document> movieOtherCollection){
-        Document d = new Document();
+    private void addMovieOtherFeatures(int id,String year, String director, String[] genre, MongoCollection<Document> movieOtherCollection){
+        Document d = new Document();  
         d.put("_id", id);
-       
+        d.put(Consts.MOVIE_YEAR,year);
+        d.put(Consts.MOVIE_DIRECTOR, director);
+        String cert=genre[0];  
+        //System.out.println(cert);
+        d.put(Consts.MOVIE_CERT,cert);
         movieOtherCollection.insertOne(d);
     }
     
-    private void addMovieGenre(int id, String director, MongoCollection<Document> movieGenreCollection){
+    private void addMovieGenre(int id, String[] genre, MongoCollection<Document> movieGenreCollection){
         Document d = new Document();
         d.put("_id", id);
-       
+        String gen="";
+        for(int i=1;i<genre.length;i++)
+            gen+=genre[i];
+        //System.out.println(gen);
+        d.put(Consts.MOVIE_GENRE_DATA,gen);
         movieGenreCollection.insertOne(d);
     }
     
@@ -171,6 +180,8 @@ public class LoadDataToDb {
             }
         }
     }
+
+   
     
     
 } 
