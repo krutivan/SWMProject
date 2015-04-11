@@ -6,9 +6,7 @@
 package swm.project.loadDataToDb;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import java.io.BufferedInputStream;
@@ -17,6 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,7 +94,12 @@ public class LoadDataToDb {
             //get collection
             db.createCollection(Consts.MOVIE_NAME_DATA);
             MongoCollection<Document> movieNamesCollection = db.getCollection(Consts.MOVIE_NAME_DATA);
-            
+            db.createCollection(Consts.MOVIE_ACTORS_DATA);
+            MongoCollection<Document> movieActorsCollection = db.getCollection(Consts.MOVIE_ACTORS_DATA);
+            db.createCollection(Consts.MOVIE_OTHERFEATURES_DATA);
+            MongoCollection<Document> movieOtherCollection = db.getCollection(Consts.MOVIE_OTHERFEATURES_DATA);
+            db.createCollection(Consts.MOVIE_GENRE_DATA);
+            MongoCollection<Document> movieGenreCollection = db.getCollection(Consts.MOVIE_GENRE_DATA);
             
             
             FileInputStream fis=null;
@@ -103,17 +109,17 @@ public class LoadDataToDb {
                 fis = new FileInputStream("datafiles//movData.txt");
                 br = new BufferedReader(new InputStreamReader(fis));
                 String inputLine;
-                int c=0;
+                int c=1;
                 while(((inputLine = br.readLine())!=null) && c<5)
                 {
                     String [] fields = inputLine.split("@");
-                    for(int i =0;i<fields.length;i++)
-                    {
-                        System.out.print(fields[i]+"____");    
+                    for (String field : fields) {
+                        System.out.print(field + "____");    
                     }
                     System.out.println("");
-                    
-                    addMovieNames(Integer.parseInt(fields[0]),fields[1], movieNamesCollection);
+                 
+                    addMovieNames(c,fields[1], movieNamesCollection);
+                    addMovieActors(c, Arrays.asList(fields[4]), movieActorsCollection);
                     c++;
                     
                    
@@ -132,6 +138,26 @@ public class LoadDataToDb {
         movieNamesCollection.insertOne(d);
     }
     
+    private void addMovieActors(int id, List<String>actors, MongoCollection<Document> movieNamesCollection){
+        Document d = new Document();
+        d.put("_id", id);
+        d.put(Consts.MOVIE_ACTORS_FIELD, actors);
+        movieNamesCollection.insertOne(d);
+    }
+    
+    private void addMovieOtherFeatures(int id, String director, MongoCollection<Document> movieOtherCollection){
+        Document d = new Document();
+        d.put("_id", id);
+       
+        movieOtherCollection.insertOne(d);
+    }
+    
+    private void addMovieGenre(int id, String director, MongoCollection<Document> movieGenreCollection){
+        Document d = new Document();
+        d.put("_id", id);
+       
+        movieGenreCollection.insertOne(d);
+    }
     
     public void dropCollections(Set<String> collectionsToDrop){
         MongoCollection<Document> collection;
