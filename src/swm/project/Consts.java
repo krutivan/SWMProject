@@ -20,7 +20,9 @@ public final class Consts {
             
     //movie names
     public static final String MOVIE_NAME_FIELD = "movieField";
-    
+    public static final String MOVIE_YEAR="movieYear";
+    public static final String MOVIE_DIRECTOR="movieDirector";
+    public static final String MOVIE_CERT="movieCert";
     //movie Actors
     public static final String MOVIE_ACTORS_FIELD = "movieActors";
 }
