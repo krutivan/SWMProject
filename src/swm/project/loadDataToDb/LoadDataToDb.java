@@ -91,7 +91,7 @@ public class LoadDataToDb {
     public void loadMovieDataToDb(){
         
             String [] collectionsToDrop = {Consts.MOVIE_ACTORS_DATA,Consts.MOVIE_GENRE_DATA,Consts.MOVIE_NAME_DATA,Consts.MOVIE_OTHERFEATURES_DATA};
-            //dropCollections(new HashSet<>(Arrays.asList(collectionsToDrop)));
+           
             dropCollections(collectionsToDrop);
            
             //get collection
@@ -113,16 +113,12 @@ public class LoadDataToDb {
                 br = new BufferedReader(new InputStreamReader(fis));
                 String inputLine;
                 int c=1;
-                while(((inputLine = br.readLine())!=null) && c<10)
+                while(((inputLine = br.readLine())!=null))
                 {
                     String [] fields = inputLine.split("@");
-                    /*for (String field : fields) {
-                        System.out.print(field + "____");    
-                    }
-                    System.out.println("");*/
-                 
+                                 
                     addMovieNames(c,fields[1], movieNamesCollection);
-                    addMovieActors(c, Arrays.asList(fields[4]), movieActorsCollection);
+                    addMovieActors(c, Arrays.asList(fields[4].split(",")), movieActorsCollection);
                     addMovieOtherFeatures(c,fields[2],fields[3],(fields[5].split(",")),movieOtherCollection);
                     addMovieGenre(c,(fields[5].split(",")),movieGenreCollection);
                     c++;                  
