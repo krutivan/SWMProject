@@ -12,4 +12,9 @@ package swm.project;
 public final class Consts {
     public static final String DBNAME= "swmdb";
     public static final String UDATA="uData";
+    
+    public static final String MOVIES_NAME_DATA = "moviesName";
+   
+            
+    //movies 
 }
