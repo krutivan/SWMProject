@@ -10,8 +10,12 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.Document;
 import swm.project.Consts;
 import swm.project.loadDataToDb.Operations;
@@ -42,6 +46,13 @@ public class FindMovieSimilarities {
     }
     
     private void findDistancesForActors(){
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//Similarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
          MongoCollection<Document> movieActorsCollection = db.getCollection(Consts.MOVIE_ACTORS_DATA);
          FindIterable<Document> movieActorsAll = movieActorsCollection.find();
         MongoCursor movieActorCursorX = movieActorsAll.iterator();
@@ -59,10 +70,12 @@ public class FindMovieSimilarities {
                 
                 double simActors = Operations.findJaccardDistance(actorsX, actorsY);
                 simActs[idX-1][idY-1] = simActors;
-                System.out.print(simActors);
+                //System.out.print(simActors+",");
+                pw.print(simActors+",");
                 
             }
-            System.out.println("");
+           // System.out.println("");
+            pw.println();
         }   
     }
     private void findDistancesForGenre(){
