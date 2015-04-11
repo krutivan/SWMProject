@@ -5,6 +5,7 @@
  */
 package swm.project.loadDataToDb;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,15 @@ public class Operations{
     
     public static <T> double findJaccardDistance(List<T> set1,List<T> set2){
         float dist = ((float)intersection(set1, set2).size())/((float)(union(set1, set2).size()));
+        return dist;
+    }
+    
+    public static long findBinaryJaccardDistance(String set1,String set2){
+        long a =  new BigInteger(set1, 2).longValue();
+        long b =  new BigInteger(set2, 2).longValue();
+        if((a | b) == 0)
+            return 0;
+        long dist=(a & b)/(a | b);
         return dist;
     }
 }

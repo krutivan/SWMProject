@@ -27,7 +27,7 @@ import swm.project.loadDataToDb.Operations;
 public class FindMovieSimilarities {
     double simActs [][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double simDirects[][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
-    
+    double simGenres[][]= new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     
     MongoClient mongoClient;
     MongoDatabase db;
@@ -44,7 +44,8 @@ public class FindMovieSimilarities {
     }
     public void findMovieSimilarities(){
         //findDistancesForActors();
-        findDistancesForDirectors();
+        //findDistancesForDirectors();
+        findDistancesForGenre();
     }
     
     private void findDistancesForActors(){
@@ -91,7 +92,7 @@ public class FindMovieSimilarities {
         }
          MongoCollection<Document> movieDirectorsCollection = db.getCollection(Consts.MOVIE_DIRECTORS_DATA);
          FindIterable<Document> movieDirectorsAll = movieDirectorsCollection.find();
-        MongoCursor movieDirectorsCursorX = movieDirectorsAll.iterator();
+         MongoCursor movieDirectorsCursorX = movieDirectorsAll.iterator();
         
         while(movieDirectorsCursorX.hasNext()){
             Document dX = (Document) movieDirectorsCursorX.next();
@@ -116,7 +117,37 @@ public class FindMovieSimilarities {
     }
     
     private void findDistancesForGenre(){
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//GenreSimilarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
         MongoCollection<Document> movieGenreCollection = db.getCollection(Consts.MOVIE_GENRE_DATA);
+        FindIterable<Document> movieGenreAll = movieGenreCollection.find();
+        MongoCursor movieGenreCursorX = movieGenreAll.iterator();
+        
+        while(movieGenreCursorX.hasNext()){
+            Document dX = (Document) movieGenreCursorX.next();
+            int idX = (int) dX.get("_id");
+            String genreX = (String) dX.get(Consts.MOVIE_GENRE_DATA);
+            MongoCursor movieGenreCursorY = movieGenreAll.iterator();
+            
+            while(movieGenreCursorY.hasNext()){
+                Document dY = (Document) movieGenreCursorY.next();
+                int idY = (int) dY.get("_id");
+                String genreY = (String) dY.get(Consts.MOVIE_GENRE_DATA);
+                
+                long simGenres = Operations.findBinaryJaccardDistance(genreX, genreY);
+                simDirects[idX-1][idY-1] = simGenres;
+                System.out.print(simGenres+",");
+                pw.print(simGenres+",");       
+            }
+           // System.out.println("");
+            pw.println();
+        }
+        
     }
     private void findDistancesForOtherFeatures(){
          MongoCollection<Document> movieOtherCollection = db.getCollection(Consts.MOVIE_OTHERFEATURES_DATA); 

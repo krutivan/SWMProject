@@ -90,7 +90,7 @@ public class LoadDataToDb {
     
     public void loadMovieDataToDb(){
         
-            String [] collectionsToDrop = {Consts.MOVIE_ACTORS_DATA,Consts.MOVIE_GENRE_DATA,Consts.MOVIE_NAME_DATA,Consts.MOVIE_OTHERFEATURES_DATA};
+            String [] collectionsToDrop = {Consts.MOVIE_ACTORS_DATA,Consts.MOVIE_GENRE_DATA,Consts.MOVIE_NAME_DATA,Consts.MOVIE_OTHERFEATURES_DATA,Consts.MOVIE_DIRECTORS_DATA};
            
             dropCollections(collectionsToDrop);
            
