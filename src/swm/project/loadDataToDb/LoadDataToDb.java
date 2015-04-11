@@ -5,7 +5,9 @@
  */
 package swm.project.loadDataToDb;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import java.io.BufferedInputStream;
@@ -89,7 +91,9 @@ public class LoadDataToDb {
     public void loadMovieDataToDb(){
         
             String [] collectionsToDrop = {Consts.MOVIE_ACTORS_DATA,Consts.MOVIE_GENRE_DATA,Consts.MOVIE_NAME_DATA,Consts.MOVIE_OTHERFEATURES_DATA};
-           // dropCollections(new HashSet<>(Arrays.asList(collectionsToDrop)));
+            //dropCollections(new HashSet<>(Arrays.asList(collectionsToDrop)));
+            dropCollections(collectionsToDrop);
+           
             //get collection
             db.createCollection(Consts.MOVIE_NAME_DATA);
             MongoCollection<Document> movieNamesCollection = db.getCollection(Consts.MOVIE_NAME_DATA);
@@ -109,7 +113,7 @@ public class LoadDataToDb {
                 br = new BufferedReader(new InputStreamReader(fis));
                 String inputLine;
                 int c=1;
-                while(((inputLine = br.readLine())!=null))
+                while(((inputLine = br.readLine())!=null) && c<10)
                 {
                     String [] fields = inputLine.split("@");
                     /*for (String field : fields) {
@@ -117,10 +121,10 @@ public class LoadDataToDb {
                     }
                     System.out.println("");*/
                  
-                    //addMovieNames(c,fields[1], movieNamesCollection);
-                    //addMovieActors(c, Arrays.asList(fields[4]), movieActorsCollection);
+                    addMovieNames(c,fields[1], movieNamesCollection);
+                    addMovieActors(c, Arrays.asList(fields[4]), movieActorsCollection);
                     addMovieOtherFeatures(c,fields[2],fields[3],(fields[5].split(",")),movieOtherCollection);
-                    //addMovieGenre(c,(fields[5].split(",")),movieGenreCollection);
+                    addMovieGenre(c,(fields[5].split(",")),movieGenreCollection);
                     c++;                  
                    
                 }
@@ -167,18 +171,13 @@ public class LoadDataToDb {
         movieGenreCollection.insertOne(d);
     }
     
-    public void dropCollections(Set<String> collectionsToDrop){
-        MongoCollection<Document> collection;
-        MongoIterable<String> collectionNames = db.listCollectionNames();
-        
-        String colName = collectionNames.first();
-        while(colName!=null)
-        {
-            if(collectionsToDrop.contains(colName)){
-                collection = db.getCollection(colName);
-                collection.dropCollection();
-            }
-        }
+    public void dropCollections(String[] collectionsToDrop){
+       int counter=0;
+       for(String collection:collectionsToDrop)
+      {
+          db.getCollection(collection).dropCollection();
+          System.out.println(collection);
+      }
     }
 
    
