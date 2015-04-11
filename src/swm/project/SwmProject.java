@@ -5,6 +5,7 @@
  */
 package swm.project;
 
+import swm.project.findsimilarities.FindMovieSimilarities;
 import swm.project.loadDataToDb.LoadDataToDb;
 
 /**
@@ -21,6 +22,8 @@ public class SwmProject {
         
         //comment
        ldb.loadMovieDataToDb();
+        FindMovieSimilarities fms = new FindMovieSimilarities();
+        fms.findMovieSimilarities();
     }
     
 }
