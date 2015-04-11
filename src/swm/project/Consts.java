@@ -13,8 +13,14 @@ public final class Consts {
     public static final String DBNAME= "swmdb";
     public static final String UDATA="uData";
     
-    public static final String MOVIES_NAME_DATA = "moviesName";
-   
+    public static final String MOVIE_NAME_DATA = "moviesName";
+    public static final String MOVIE_ACTORS_DATA = "movieActors";
+    public static final String MOVIE_GENRE_DATA = "movieGenre";
+    public static final String MOVIE_OTHERFEATURES_DATA = "movieOther";
             
-    //movies 
+    //movie names
+    public static final String MOVIE_NAME_FIELD = "movieField";
+    
+    //movie Actors
+    public static final String MOVIE_ACTORS_FIELD = "movieActors";
 }
