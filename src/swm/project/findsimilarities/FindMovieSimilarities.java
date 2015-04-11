@@ -26,6 +26,7 @@ import swm.project.loadDataToDb.Operations;
  */
 public class FindMovieSimilarities {
     double simActs [][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
+    double simDirects[][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     
     
     MongoClient mongoClient;
@@ -42,7 +43,8 @@ public class FindMovieSimilarities {
         db=mongoClient.getDatabase(Consts.DBNAME);
     }
     public void findMovieSimilarities(){
-        findDistancesForActors();
+        //findDistancesForActors();
+        findDistancesForDirectors();
     }
     
     private void findDistancesForActors(){
@@ -78,6 +80,41 @@ public class FindMovieSimilarities {
             pw.println();
         }   
     }
+    
+    private void findDistancesForDirectors(){
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//DirectorSimilarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         MongoCollection<Document> movieDirectorsCollection = db.getCollection(Consts.MOVIE_DIRECTORS_DATA);
+         FindIterable<Document> movieDirectorsAll = movieDirectorsCollection.find();
+        MongoCursor movieDirectorsCursorX = movieDirectorsAll.iterator();
+        
+        while(movieDirectorsCursorX.hasNext()){
+            Document dX = (Document) movieDirectorsCursorX.next();
+            int idX = (int) dX.get("_id");
+            List<String> directorsX = (List<String>) dX.get(Consts.MOVIE_DIRECTORS_DATA);
+            MongoCursor movieDirectorsCursorY = movieDirectorsAll.iterator();
+            
+            while(movieDirectorsCursorY.hasNext()){
+                Document dY = (Document) movieDirectorsCursorY.next();
+                int idY = (int) dY.get("_id");
+                List<String> directorsY = (List<String>) dY.get(Consts.MOVIE_DIRECTORS_DATA);
+                
+                double simDirectors = Operations.findJaccardDistance(directorsX, directorsY);
+                simDirects[idX-1][idY-1] = simDirectors;
+                //System.out.print(simDirectors+",");
+                pw.print(simDirectors+",");
+                
+            }
+           // System.out.println("");
+            pw.println();
+        }   
+    }
+    
     private void findDistancesForGenre(){
         MongoCollection<Document> movieGenreCollection = db.getCollection(Consts.MOVIE_GENRE_DATA);
     }

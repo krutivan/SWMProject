@@ -17,6 +17,7 @@ public final class Consts {
     public static final String MOVIE_ACTORS_DATA = "movieActors";
     public static final String MOVIE_GENRE_DATA = "movieGenre";
     public static final String MOVIE_OTHERFEATURES_DATA = "movieOther";
+    public static final String MOVIE_DIRECTORS_DATA="movieDirectors";
             
     //movie names
     public static final String MOVIE_NAME_FIELD = "movieField";

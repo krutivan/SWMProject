@@ -103,6 +103,9 @@ public class LoadDataToDb {
             MongoCollection<Document> movieOtherCollection = db.getCollection(Consts.MOVIE_OTHERFEATURES_DATA);
             db.createCollection(Consts.MOVIE_GENRE_DATA);
             MongoCollection<Document> movieGenreCollection = db.getCollection(Consts.MOVIE_GENRE_DATA);
+            db.createCollection(Consts.MOVIE_DIRECTORS_DATA);
+            MongoCollection<Document> movieDirectorsCollection=db.getCollection(Consts.MOVIE_DIRECTORS_DATA);
+            
             
             
             FileInputStream fis=null;
@@ -118,6 +121,7 @@ public class LoadDataToDb {
                     String [] fields = inputLine.split("@");
                                  
                     addMovieNames(c,fields[1], movieNamesCollection);
+                    addDirectors(c,Arrays.asList(fields[3]),movieDirectorsCollection);
                     addMovieActors(c, Arrays.asList(fields[4].split(",")), movieActorsCollection);
                     addMovieOtherFeatures(c,fields[2],fields[3],(fields[5].split(",")),movieOtherCollection);
                     addMovieGenre(c,(fields[5].split(",")),movieGenreCollection);
@@ -129,6 +133,14 @@ public class LoadDataToDb {
             } catch (IOException ex) {          
             Logger.getLogger(LoadDataToDb.class.getName()).log(Level.SEVERE, null, ex);
         }          
+    }
+    
+    private void addDirectors(int id, List<String> director, MongoCollection<Document> movieNamesCollection)
+    {
+        Document d = new Document();  
+        d.put("_id", id);
+        d.put(Consts.MOVIE_DIRECTORS_DATA, director);
+        movieNamesCollection.insertOne(d);
     }
     
     private void addMovieNames(int id, String movieName, MongoCollection<Document> movieNamesCollection){
