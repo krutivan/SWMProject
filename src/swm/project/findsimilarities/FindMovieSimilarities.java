@@ -28,7 +28,9 @@ public class FindMovieSimilarities {
     double simActs [][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double simDirects[][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double simGenres[][]= new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
-    
+    double finalSim[][] = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
+    //finalSim[x][y] = ActorWeight* simAct[x][y] + DirectorWeight * SimDirects[x][y]...
+    //sum of all weights = 1;
     MongoClient mongoClient;
     MongoDatabase db;
    
@@ -147,8 +149,8 @@ public class FindMovieSimilarities {
            // System.out.println("");
             pw.println();
         }
-        
     }
+    
     private void findDistancesForOtherFeatures(){
          MongoCollection<Document> movieOtherCollection = db.getCollection(Consts.MOVIE_OTHERFEATURES_DATA); 
     }
