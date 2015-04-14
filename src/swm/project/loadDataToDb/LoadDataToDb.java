@@ -53,8 +53,7 @@ public class LoadDataToDb {
         collection = db.getCollection(Consts.UDATA);
         collection.dropCollection();
         db.createCollection(Consts.UDATA);
-        
-        
+                
         FileInputStream fis=null;
         BufferedReader br;
         BufferedInputStream bis = null;
@@ -90,7 +89,7 @@ public class LoadDataToDb {
     
     public void loadMovieDataToDb(){
         
-            String [] collectionsToDrop = {Consts.MOVIE_ACTORS_DATA,Consts.MOVIE_GENRE_DATA,Consts.MOVIE_NAME_DATA,Consts.MOVIE_OTHERFEATURES_DATA,Consts.MOVIE_DIRECTORS_DATA};
+            String [] collectionsToDrop = {Consts.MOVIE_ACTORS_DATA,Consts.MOVIE_GENRE_DATA,Consts.MOVIE_NAME_DATA,Consts.MOVIE_OTHERFEATURES_DATA,Consts.MOVIE_DIRECTORS_DATA,Consts.MOVIE_DATE_DATA};
            
             dropCollections(collectionsToDrop);
            
@@ -106,7 +105,8 @@ public class LoadDataToDb {
             db.createCollection(Consts.MOVIE_DIRECTORS_DATA);
             MongoCollection<Document> movieDirectorsCollection=db.getCollection(Consts.MOVIE_DIRECTORS_DATA);
             
-            
+            db.createCollection(Consts.MOVIE_DATE_DATA);
+            MongoCollection<Document> movieDatesCollection=db.getCollection(Consts.MOVIE_DATE_DATA);
             
             FileInputStream fis=null;
             BufferedReader br;
@@ -116,17 +116,19 @@ public class LoadDataToDb {
                 br = new BufferedReader(new InputStreamReader(fis));
                 String inputLine;
                 int c=1;
-                while(((inputLine = br.readLine())!=null))
+                while(((inputLine = br.readLine())!=null) && c<300)
                 {
                     String [] fields = inputLine.split("@");
-                                 
+                    fields[2].trim();
+                    if(fields[2]==" ")
+                        fields[2]="0";                        
                     addMovieNames(c,fields[1], movieNamesCollection);
                     addDirectors(c,Arrays.asList(fields[3]),movieDirectorsCollection);
                     addMovieActors(c, Arrays.asList(fields[4].split(",")), movieActorsCollection);
                     addMovieOtherFeatures(c,fields[2],fields[3],(fields[5].split(",")),movieOtherCollection);
                     addMovieGenre(c,(fields[5].split(",")),movieGenreCollection);
-                    c++;                  
-                   
+                    addMovieDates(c,Integer.parseInt(fields[2]),movieDatesCollection);
+                    c++;                                   
                 }
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(LoadDataToDb.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,6 +143,14 @@ public class LoadDataToDb {
         d.put("_id", id);
         d.put(Consts.MOVIE_DIRECTORS_DATA, director);
         movieNamesCollection.insertOne(d);
+    }
+    
+    private void addMovieDates(int id, int date, MongoCollection<Document> movieDatesCollection)
+    {
+        Document d = new Document();  
+        d.put("_id", id);
+        d.put(Consts.MOVIE_DATE_DATA, date);
+        movieDatesCollection.insertOne(d);
     }
     
     private void addMovieNames(int id, String movieName, MongoCollection<Document> movieNamesCollection){

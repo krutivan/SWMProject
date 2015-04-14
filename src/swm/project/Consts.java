@@ -26,7 +26,7 @@ public final class Consts {
     public static final String MOVIE_CERT="movieCert";
     //movie Actors
     public static final String MOVIE_ACTORS_FIELD = "movieActors";
-    
+    public static final String MOVIE_DATE_DATA="movieDates";
     //counts
     public static final int MAX_MOVIES = 1682;
 }
