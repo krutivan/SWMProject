@@ -31,7 +31,7 @@ public class FindMovieSimilarities {
     double simDates[][]= new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double finalSim[][] = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     
-    //finalSim[x][y] = ActorWeight* simAct[x][y] + DirectorWeight * SimDirects[x][y]...
+    //
     //sum of all weights = 1;
     MongoClient mongoClient;
     MongoDatabase db;
@@ -47,10 +47,11 @@ public class FindMovieSimilarities {
         db=mongoClient.getDatabase(Consts.DBNAME);
     }
     public void findMovieSimilarities(){
-        //findDistancesForActors();
-        //findDistancesForDirectors();
-        //findDistancesForGenre();
+        findDistancesForActors();
+        findDistancesForDirectors();
+        findDistancesForGenre();
         findDistancesForDates();
+        findOverallDistance();
     }
     
     private void findDistancesForActors(){
@@ -146,7 +147,7 @@ public class FindMovieSimilarities {
                 
                 double similarGenres = Operations.findBinaryJaccardDistance(genreX, genreY);
                 simGenres[idX-1][idY-1] = similarGenres;
-                System.out.print(similarGenres+",");
+                //System.out.print(similarGenres+",");
                 pw.print(similarGenres+",");       
             }
            // System.out.println("");
@@ -179,10 +180,31 @@ public class FindMovieSimilarities {
                 int dateY = (int) dY.get(Consts.MOVIE_DATE_DATA);
                 double similarDates = Operations.findSimilarDates(dateX, dateY);
                 simDates[idX-1][idY-1] = similarDates;
-                System.out.print(similarDates+",");
+                //System.out.print(similarDates+",");
                 pw.print(similarDates+",");       
             }
            // System.out.println("");
+            pw.println();
+        }
+        pw.close();
+    }
+    
+    private void findOverallDistance()
+    {
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//OverallSimilarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for(int i=0;i<Consts.MAX_MOVIES;i++)
+        {
+            for(int j=0;j<Consts.MAX_MOVIES;j++)
+            {
+                finalSim[i][j] = Consts.ActorWeight* simActs[i][j] + Consts.DirectorWeight * simDirects[i][j]+ Consts.DateWeight*simDates[i][j]+Consts.GenreWeight*simGenres[i][j];
+                pw.print(finalSim[i][j]+",");
+            }
             pw.println();
         }
         pw.close();

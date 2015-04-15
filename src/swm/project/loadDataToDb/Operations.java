@@ -40,7 +40,7 @@ public class Operations{
         long b =  new BigInteger(set2, 2).longValue();
         if((a | b) == 0)
             return 0;
-        double dist=(a & b)/(a | b);
+        double dist=(double) (a & b)/(a | b);
         return dist;
     }
     
