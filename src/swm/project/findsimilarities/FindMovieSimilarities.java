@@ -28,7 +28,9 @@ public class FindMovieSimilarities {
     double simActs [][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double simDirects[][]=new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double simGenres[][]= new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
+    double simDates[][]= new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
     double finalSim[][] = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
+    
     //finalSim[x][y] = ActorWeight* simAct[x][y] + DirectorWeight * SimDirects[x][y]...
     //sum of all weights = 1;
     MongoClient mongoClient;
@@ -47,7 +49,8 @@ public class FindMovieSimilarities {
     public void findMovieSimilarities(){
         //findDistancesForActors();
         //findDistancesForDirectors();
-        findDistancesForGenre();
+        //findDistancesForGenre();
+        findDistancesForDates();
     }
     
     private void findDistancesForActors(){
@@ -141,14 +144,48 @@ public class FindMovieSimilarities {
                 int idY = (int) dY.get("_id");
                 String genreY = (String) dY.get(Consts.MOVIE_GENRE_DATA);
                 
-                long simGenres = Operations.findBinaryJaccardDistance(genreX, genreY);
-                simDirects[idX-1][idY-1] = simGenres;
-                System.out.print(simGenres+",");
-                pw.print(simGenres+",");       
+                double similarGenres = Operations.findBinaryJaccardDistance(genreX, genreY);
+                simGenres[idX-1][idY-1] = similarGenres;
+                System.out.print(similarGenres+",");
+                pw.print(similarGenres+",");       
             }
            // System.out.println("");
             pw.println();
         }
+    }
+    
+    private void findDistancesForDates()
+    {
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//DateSimilarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        MongoCollection<Document> movieDateCollection = db.getCollection(Consts.MOVIE_DATE_DATA);
+        FindIterable<Document> movieDateAll = movieDateCollection.find();
+        MongoCursor movieDateCursorX = movieDateAll.iterator();
+        
+        while(movieDateCursorX.hasNext()){
+            Document dX = (Document) movieDateCursorX.next();
+            int idX = (int) dX.get("_id");
+            int dateX = (int)dX.get(Consts.MOVIE_DATE_DATA);
+            MongoCursor movieDateCursorY = movieDateAll.iterator();
+            
+            while(movieDateCursorY.hasNext()){
+                Document dY = (Document) movieDateCursorY.next();
+                int idY = (int) dY.get("_id");
+                int dateY = (int) dY.get(Consts.MOVIE_DATE_DATA);
+                double similarDates = Operations.findSimilarDates(dateX, dateY);
+                simDates[idX-1][idY-1] = similarDates;
+                System.out.print(similarDates+",");
+                pw.print(similarDates+",");       
+            }
+           // System.out.println("");
+            pw.println();
+        }
+        pw.close();
     }
     
     private void findDistancesForOtherFeatures(){
