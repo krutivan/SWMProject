@@ -30,8 +30,8 @@ public final class Consts {
     //counts
     public static final int MAX_MOVIES = 1682;
     //Weights
-    public static final double ActorWeight=0.3;
-    public static final double DirectorWeight=0.1;
+    public static final double ActorWeight=0.2;
+    public static final double DirectorWeight=0.3;
     public static final double GenreWeight=0.5;
     public static final double DateWeight=0.1;
     

@@ -116,7 +116,7 @@ public class LoadDataToDb {
                 br = new BufferedReader(new InputStreamReader(fis));
                 String inputLine;
                 int c=1;
-                while(((inputLine = br.readLine())!=null) && c<300)
+                while(((inputLine = br.readLine())!=null))
                 {
                     String [] fields = inputLine.split("@");
                     fields[2].trim();
