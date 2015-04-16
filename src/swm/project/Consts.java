@@ -35,4 +35,10 @@ public final class Consts {
     public static final double GenreWeight=0.5;
     public static final double DateWeight=0.1;
     
+    //User attributes
+    public static final String USER_AGE="userAge";
+    public static final String USER_GENDER="userGender";
+    public static final String USER_OCCUPATION="userOccupation";
+    public static final String USER_ZIP="userZip";
+    
 }
