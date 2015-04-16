@@ -35,7 +35,6 @@ public class FindMovieSimilarities {
     //sum of all weights = 1;
     MongoClient mongoClient;
     MongoDatabase db;
-   
     
     public FindMovieSimilarities() {
         connectToDb();
@@ -58,7 +57,7 @@ public class FindMovieSimilarities {
         PrintWriter pw = null;
         try {
             
-            pw = new PrintWriter("datafiles//Similarities.csv");
+            pw = new PrintWriter("datafiles//ActorSimilarities.csv");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
         }
