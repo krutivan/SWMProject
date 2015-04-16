@@ -48,7 +48,7 @@ public class DBscanTest {
     public void setUp() throws IOException {
          int numOfItems = 0;
         double[][] matrix = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
-        BufferedReader br = new BufferedReader(new FileReader("datafiles//DateSimilarities.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("datafiles//OverallSimilarities.csv"));
         String line;
         int i = 0;
         while((line = br.readLine())!=null){
@@ -62,7 +62,7 @@ public class DBscanTest {
         
         DBscan instance = new DBscan(Consts.MAX_MOVIES, matrix);
         
-        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(5, 0.01);
+        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(25, 0.5);
         PrintWriter pw = new PrintWriter("datafiles//MovieClusters.csv");
         if(pw!=null){
             Set<Integer> ks = clusters.keySet();
