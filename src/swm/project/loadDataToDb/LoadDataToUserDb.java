@@ -74,7 +74,7 @@ public class LoadDataToUserDb {
             fis = new FileInputStream("datafiles//u.user");
             br = new BufferedReader(new InputStreamReader(fis));
             String inputLine;
-            int c=0;
+            int c=1;
             while((inputLine = br.readLine())!=null)
             {
                 inputLine.trim();
@@ -84,6 +84,7 @@ public class LoadDataToUserDb {
                 addUserGender(c,fields[2],userGenderCollection);
                 addUserOccupation(c,fields[3],userOccupationCollection);
                 addUserZip(c,Integer.parseInt(fields[4]),userZipCollection);
+                c++;
             }
         } catch (FileNotFoundException ex) {
             System.out.println("u.data file not found"+ex.getMessage());

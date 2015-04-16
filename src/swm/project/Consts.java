@@ -29,6 +29,7 @@ public final class Consts {
     public static final String MOVIE_DATE_DATA="movieDates";
     //counts
     public static final int MAX_MOVIES = 1682;
+    public static final int MAX_USERS=943;
     //Weights
     public static final double ActorWeight=0.2;
     public static final double DirectorWeight=0.3;

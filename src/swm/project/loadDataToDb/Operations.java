@@ -65,4 +65,11 @@ public class Operations{
            }
            return initial;
        }
+       
+       public static int findSimilar(String a,String b)
+       {
+           if(a.equals(b))
+               return 1;
+           return 0;
+       }
  }
