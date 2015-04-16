@@ -5,9 +5,12 @@
  */
 package swm.project.clustering;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,8 +21,11 @@ public class DBscan {
     
     double similarityMatrix[][];
     HashMap<Integer, ClusterPoint> pointsToCluster;
+    private Object monitor;
+
     
-    void initializeSimilarityMatrix(int numOfItems, double[][] matrix){
+    DBscan(int numOfItems, double[][] matrix){
+        monitor=new Object();
         similarityMatrix = matrix;
         pointsToCluster = new HashMap<>();
         for(int i=1;i<= numOfItems; i++){
@@ -30,7 +36,7 @@ public class DBscan {
     double[][] getSimilarityMatrix(){
         return similarityMatrix;
     }
-    HashMap<Integer, ClusterPoint> ClusterUsingDBScan(int minPnts, double eps){
+    public synchronized HashMap<Integer, ClusterPoint> ClusterUsingDBScan(int minPnts, double eps){
         Set<Integer> keySet = pointsToCluster.keySet();
         Iterator<Integer> pointsIterator = keySet.iterator();
         
@@ -55,8 +61,8 @@ public class DBscan {
         return pointsToCluster;
     }
     
-    HashSet<Integer> regionQuery(int id, double eps){
-        HashSet<Integer> neighbors=new HashSet<>();
+    private synchronized Set<Integer> regionQuery(int id, double eps){
+        Set<Integer> neighbors=Collections.synchronizedSet(new HashSet());
         
         for (int i = 0; i < similarityMatrix.length; i++) {
             if(similarityMatrix[id-1][i] > eps)
@@ -66,22 +72,41 @@ public class DBscan {
         return neighbors;
     }
 
-    private void expandCluster(ClusterPoint currentPoint, Set<Integer> neighborPoints, int currentClusterNumber, double eps, int minPnts) {
+    private synchronized void expandCluster(ClusterPoint currentPoint, Set<Integer> neighborPoints, int currentClusterNumber, double eps, int minPnts) {
+        LinkedList<Integer> neighborsList= new LinkedList<>(neighborPoints);
+        
         currentPoint.setClusterNumber(currentClusterNumber);
         Iterator<Integer> neighborsIterator = neighborPoints.iterator();
-        while(neighborsIterator.hasNext()){
-            ClusterPoint pointsNeighbor = pointsToCluster.get(neighborsIterator.next());
+        while(!neighborsList.isEmpty()){
+            ClusterPoint pointsNeighbor =pointsToCluster.get(neighborsList.getFirst());
             if(!pointsNeighbor.isVisited()){
                 pointsNeighbor.setVisited(true);
                 Set<Integer> neighborsofNeighbor = regionQuery(pointsNeighbor.getClusterPointId(), eps);
-                if(neighborsofNeighbor.size()>= minPnts)
-                    neighborPoints.addAll(neighborsofNeighbor);
+                 if(neighborsofNeighbor.size()>= minPnts){
+                     for(Integer p: neighborsofNeighbor)
+                         neighborsList.addLast(p);
+                }
             }
             if(pointsNeighbor.getClusterNumber() == ClusterPoint.NOT_VISITED){
                 pointsNeighbor.setClusterNumber(currentClusterNumber);
             }
-            
+            neighborsList.remove();
         }
+        
+//        while(neighborsIterator.hasNext()){
+//            ClusterPoint pointsNeighbor = pointsToCluster.get(neighborsIterator.next());
+//            if(!pointsNeighbor.isVisited()){
+//                pointsNeighbor.setVisited(true);
+//                Set<Integer> neighborsofNeighbor = regionQuery(pointsNeighbor.getClusterPointId(), eps);
+//                if(neighborsofNeighbor.size()>= minPnts){
+//                    expandCluster(pointsNeighbor, neighborsofNeighbor, currentClusterNumber, eps, minPnts);
+//                    //neighborPoints.addAll(neighborsofNeighbor);
+//                }
+//                    
+//            }
+            
+            
+        
        
     }
     
