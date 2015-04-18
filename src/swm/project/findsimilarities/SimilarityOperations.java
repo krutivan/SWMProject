@@ -5,7 +5,11 @@
  */
 package swm.project.findsimilarities;
 
+import java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 import java.util.ArrayList;
+import swm.project.Consts;
 
 /**
  *
@@ -88,5 +92,41 @@ public class SimilarityOperations {
         differentFeatureDistance = (numberOfRankedItems1-commonRanked) + (numberOfRankedItems2 - commonRanked);
         
         return (commonFeatureDist/(commonFeatureDist+differentFeatureDistance));
-    } 
+    }
+    
+    public double findJacUOD(ArrayList<Double> vector1, ArrayList<Double> vector2){
+        double commonFeatureDist=0,differentFeatureDistance=0;
+        double simuv=0,numerator=0,denominator=0;
+        int su=0, sv=0, suv = 0, suunionsv=0;
+        boolean flag=false;
+        
+        for(int i=0;i<vector1.size();i++)
+        {
+            double vector1rating = vector1.get(i);
+            double vector2rating = vector2.get(i);
+            if(vector1rating!=vector2rating){
+                flag=true;
+            }
+            if(vector1rating!=0)              
+                   su++;
+            if(vector2rating!=0)
+                   sv++;
+             if(vector1rating > 0 && vector2rating > 0)//common feature
+            {
+                suv++;
+                denominator+=pow((vector1rating-vector2rating),2);
+            }
+             
+        }
+        suunionsv=su+sv-suv;
+        numerator=sqrt(5*pow((MAX_RATING-MIN_RATING),2));
+        System.out.println(suv + " " + numerator);
+        if(flag)
+            denominator=sqrt(denominator);
+        else
+            denominator=0.9;
+        simuv=(suv/suunionsv)*(numerator/denominator);
+        return simuv;
+    }
 }
+
