@@ -44,28 +44,29 @@ public class SimilarityOperationsTest {
      */
     @Test
     public void testSimilarities() {
-        System.out.println("cosineSimilarities");
+        //System.out.println("cosineSimilarities");
         ArrayList<Double> vector1 = new ArrayList<>();
         ArrayList<Double> vector2 = new ArrayList<>();
-        vector1.add(1.0);
         vector1.add(2.0);
         vector1.add(1.0);
-        vector1.add(2.0);
-        vector1.add(5.0);
+        vector1.add(1.0);
+        vector1.add(1.0);
+        vector1.add(0.0);
 
         vector2.add(2.0);
         vector2.add(4.0);
         vector2.add(2.0);
-        vector2.add(0.0);
-        vector2.add(0.0);
+        vector2.add(4.0);
+        vector2.add(5.0);
         
 
         SimilarityOperations instance = new SimilarityOperations();
-        double expResult = 0.9948;
-        double result = instance.cosineSimilarities(vector1, vector2);
-        double p = instance.pearsonsCoefficient(vector1, vector2);
-        double n = instance.findSimilarity(vector1, vector2);
-        System.out.println(result+" , "+p+" , "+n);
+        double expResult = 9.938;
+        //double result = instance.cosineSimilarities(vector1, vector2);
+        //double p = instance.pearsonsCoefficient(vector1, vector2);
+        double result = instance.findJacUOD(vector1, vector2);
+        //System.out.println(result+" , "+p+" , "+n);
+        System.out.println(result);
         assertEquals(expResult, result, 0.001);
         // TODO review the generated test code and remove the default call to fail.
         
