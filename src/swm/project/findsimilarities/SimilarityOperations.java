@@ -55,8 +55,10 @@ public class SimilarityOperations {
             normalizedv1.add(vector1.get(i)-avg1);
             normalizedv2.add(vector2.get(i)-avg2);
         }
+        }
         return cosineSimilarities(normalizedv1, normalizedv2);
     }
+
  
     private double findAvg(ArrayList<Double> vector)
     {
