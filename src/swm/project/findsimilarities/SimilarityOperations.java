@@ -34,16 +34,31 @@ public class SimilarityOperations {
     }
     /*wrong hass to be fixed*/
     public double pearsonsCoefficient(ArrayList<Double> vector1, ArrayList<Double> vector2){
-        double avg1 = findAvg(vector1);
-        double avg2 = findAvg(vector1);
+        ArrayList<Double> vecNonZero1=new ArrayList<Double>();
+        ArrayList<Double> vecNonZero2=new ArrayList<Double>();
+        for(int i=0;i<vector1.size();i++)
+        {
+            if(vector1.get(i)!=0.0)
+                vecNonZero1.add(vector1.get(i));
+        }
+        for(int i=0;i<vector2.size();i++)
+        {
+            if(vector2.get(i)!=0.0)
+                vecNonZero2.add(vector2.get(i));
+        }
+        double avg1 = findAvg(vecNonZero1);
+        double avg2 = findAvg(vecNonZero2);
         ArrayList<Double> normalizedv1 = new ArrayList<>();
         ArrayList<Double> normalizedv2 = new ArrayList<>();
         for (int i=0;i< vector1.size();i++){
+            if(vector1.get(i)>0 && vector2.get(i)>0){
             normalizedv1.add(vector1.get(i)-avg1);
             normalizedv2.add(vector2.get(i)-avg2);
         }
+        }
         return cosineSimilarities(normalizedv1, normalizedv2);
     }
+
  
     private double findAvg(ArrayList<Double> vector)
     {
