@@ -31,10 +31,10 @@ public final class Consts {
     public static final int MAX_MOVIES = 1682;
     public static final int MAX_USERS=943;
     //Weights
-    public static final double ActorWeight=0.2;
-    public static final double DirectorWeight=0.3;
-    public static final double GenreWeight=0.5;
-    public static final double DateWeight=0.1;
+    public static final double ActorWeight=0.1;
+    public static final double DirectorWeight=0.1;
+    public static final double GenreWeight=0.75;
+    public static final double DateWeight=0.05;
     
     //User attributes
     public static final String USER_AGE="userAge";

@@ -22,15 +22,15 @@ public class SwmProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        loadAllDataToDb();
-        findSimilarities();
+        //loadAllDataToDb();
+        //findSimilarities();
         CreateMappings m =new CreateMappings();
-//        try {
-//            m.createMovieToMovieClusters();
-//        } catch (IOException ex) {
-//            Logger.getLogger(SwmProject.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        //m.createUserToMovieCluster();
+        try {
+            m.createMovieToMovieClusters();
+        } catch (IOException ex) {
+            Logger.getLogger(SwmProject.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        m.createUserToMovieCluster();
     }
  
     public static void loadAllDataToDb(){

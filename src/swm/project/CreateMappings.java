@@ -39,7 +39,7 @@ public class CreateMappings {
     public void createUserToMovieCluster(){
         GetDataFromDb gdb = new GetDataFromDb();
         HashMap<Integer, HashMap<Integer,Integer>> userRatings = gdb.getAllUserRatings();
-        
+        userToMovieClusters = new HashMap<>();
         Set<Integer> users = userRatings.keySet();
         for(int u: users){
             HashMap<Integer,Integer> movieAndRatings = userRatings.get(u);
@@ -57,10 +57,11 @@ public class CreateMappings {
                 if(userLikesMovie(rating,avgRatingForUser))
                     voteValue = 1;
                 
-                if(clusterToVote.containsKey(m))
-                    oldVote = clusterToVote.get(m);
+                int clusterNumber = movieToMovieCluster.get(m);
+                if(clusterToVote.containsKey(clusterNumber))
+                    oldVote = clusterToVote.get(clusterNumber);
                     
-                clusterToVote.put(m, oldVote+voteValue);
+                clusterToVote.put(clusterNumber, oldVote+voteValue);
             }
         }
         System.out.println("");
