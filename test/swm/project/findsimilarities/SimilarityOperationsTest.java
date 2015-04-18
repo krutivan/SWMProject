@@ -58,7 +58,6 @@ public class SimilarityOperationsTest {
         vector2.add(2.0);
         vector2.add(4.0);
         vector2.add(5.0);
-        
 
         SimilarityOperations instance = new SimilarityOperations();
         double expResult = 9.938;

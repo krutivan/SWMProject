@@ -46,8 +46,8 @@ public class Operations{
     
      public static double function(double x)
      {
-         double temp=0.0598*(x-1922);
-         double result=0.3584*Math.exp(temp);
+         double temp=0.0462*x;
+         double result=1.2741*Math.exp(temp);
          return result;
      }
      
