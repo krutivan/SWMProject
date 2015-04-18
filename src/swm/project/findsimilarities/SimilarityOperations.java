@@ -32,7 +32,7 @@ public class SimilarityOperations {
         return(dotProduct/(squaredSum1 * squaredSum2));
         
     }
-    
+    /*wrong hass to be fixed*/
     public double pearsonsCoefficient(ArrayList<Double> vector1, ArrayList<Double> vector2){
         double avg1 = findAvg(vector1);
         double avg2 = findAvg(vector1);
