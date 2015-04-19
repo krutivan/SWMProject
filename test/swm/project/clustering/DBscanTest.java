@@ -62,7 +62,7 @@ public class DBscanTest {
         
         DBscan instance = new DBscan(Consts.MAX_MOVIES, matrix);
         
-        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(25, 0.5);
+        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(10, 0.6);
         PrintWriter pw = new PrintWriter("datafiles//MovieClusters.csv");
         if(pw!=null){
             Set<Integer> ks = clusters.keySet();
