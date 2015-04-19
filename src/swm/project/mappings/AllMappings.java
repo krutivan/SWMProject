@@ -6,6 +6,7 @@
 package swm.project.mappings;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -16,8 +17,9 @@ public class AllMappings {
     public MovieToMovieCluster movieToMovieCluster;
     public UserToMovieRatings userToMovieRatings;
     public UserToMovieCluster userToMovieCluster;
+    private MovieRecommender movieReccommender;
     private AllMappings(){
-        
+        movieReccommender = new MovieRecommender();
     }
     
     public static AllMappings getInstance(){
@@ -42,9 +44,13 @@ public class AllMappings {
     public void initUsertoMovieCluster(){
         userToMovieCluster = new UserToMovieCluster();
         userToMovieCluster.setUserToMovieCluster();
-                
+        userToMovieCluster.calculateUserToClusterProbability();
     }
     
-     
+    public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies)
+    {
+        return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId).values());
+        
+    }
     
 }

@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import swm.project.Consts;
@@ -51,10 +52,8 @@ import swm.project.Consts;
         return clustToMov.get(clusterNumber).size();
     }
     
-    
-    
-
-    
-    
+    public Collection<Integer> getMoviesInCluster (int clusterNum){
+        return clustToMov.get(clusterNum);
+    }
     
 }

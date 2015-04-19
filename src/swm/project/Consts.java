@@ -46,4 +46,6 @@ public final class Consts {
     public static final String MOVIE_ID="movieID";
     public static final String RATING="rating";
     
+    //filename
+    public static final String DBSCAN_CLUSTERS="datafiles//MovieClusters.csv";
 }
