@@ -21,8 +21,20 @@ public class Operations{
         tmp.addAll(set2);
         return tmp;    
     }
+     public static <T> Set<T> union(Set<T> set1, Set<T> set2){
+        Set<T> tmp = new HashSet<>(set1);
+        tmp.addAll(set2);
+        return tmp;    
+    }
         
     public static <T> Set<T> intersection(List<T> set1, List<T> set2){
+        Set<T> tmp = new HashSet<>();
+        set1.stream().filter((x) -> (set2.contains(x))).forEach((x) -> {
+            tmp.add(x);
+        });
+        return tmp;
+    }
+     public static <T> Set<T> intersection(Set<T> set1, Set<T> set2){
         Set<T> tmp = new HashSet<>();
         set1.stream().filter((x) -> (set2.contains(x))).forEach((x) -> {
             tmp.add(x);
