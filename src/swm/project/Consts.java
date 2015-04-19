@@ -42,4 +42,8 @@ public final class Consts {
     public static final String USER_OCCUPATION="userOccupation";
     public static final String USER_ZIP="userZip";
     
+    public static final String USER_ID="userID";
+    public static final String MOVIE_ID="movieID";
+    public static final String RATING="rating";
+    
 }
