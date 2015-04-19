@@ -25,6 +25,7 @@ public class CreateMappings {
  
     HashMap<Integer, Integer> movieToMovieCluster;
     HashMap<Integer, HashMap<Integer,Integer>> userToMovieClusters;
+     HashMap<Integer, HashMap<Integer,Integer>> userRatings;
     public void createMovieToMovieClusters() throws FileNotFoundException, IOException{
         movieToMovieCluster = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader("datafiles//MovieClusters.csv"));
@@ -38,7 +39,7 @@ public class CreateMappings {
     
     public void createUserToMovieCluster(){
         GetDataFromDb gdb = new GetDataFromDb();
-        HashMap<Integer, HashMap<Integer,Integer>> userRatings = gdb.getAllUserRatings();
+        userRatings = gdb.getAllUserRatings();
         userToMovieClusters = new HashMap<>();
         Set<Integer> users = userRatings.keySet();
         for(int u: users){
