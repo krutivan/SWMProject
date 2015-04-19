@@ -10,10 +10,11 @@ package swm.project.mappings;
  * @author Kruti
  */
  class UserVote {
+    
     private int clusterId;
     private int votes;
     private int totalMoviesRatedInCluster;
-    private int prob;
+    private double prob;
     private int clusterSize;
 
     public UserVote(int clusterId, int clusterSize) {
@@ -22,7 +23,7 @@ package swm.project.mappings;
         votes=0;
         totalMoviesRatedInCluster =0;
     }
-
+    
     public void incrementVote(int newVote)
     {
         totalMoviesRatedInCluster++;
@@ -31,7 +32,11 @@ package swm.project.mappings;
             votes=0;
             
     }
-
+    
+    public void calcProb(int totalVotes){
+        prob = (double)votes/(double)totalVotes;
+    }
+    
     public int getClusterId() {
         return clusterId;
     }
@@ -44,7 +49,7 @@ package swm.project.mappings;
         return totalMoviesRatedInCluster;
     }
 
-    public int getProb() {
+    public double getProb() {
         return prob;
     }
 
