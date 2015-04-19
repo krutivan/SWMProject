@@ -94,7 +94,7 @@ public class SimilarityOperations {
         return (commonFeatureDist/(commonFeatureDist+differentFeatureDistance));
     }
     
-    public double findJacUOD(ArrayList<Double> vector1, ArrayList<Double> vector2){
+    public double findJacUOD(ArrayList<Integer> vector1, ArrayList<Integer> vector2){
         double commonFeatureDist=0,differentFeatureDistance=0;
         double simuv=0,numerator=0,denominator=0;
         int su=0, sv=0, suv = 0, suunionsv=0;
@@ -119,7 +119,7 @@ public class SimilarityOperations {
              
         }
         suunionsv=su+sv-suv;
-        numerator=sqrt(5*pow((MAX_RATING-MIN_RATING),2));
+        numerator=sqrt(Consts.MAX_MOVIES*pow((MAX_RATING-MIN_RATING),2));
         System.out.println(suv + " " + numerator);
         if(flag)
             denominator=sqrt(denominator);

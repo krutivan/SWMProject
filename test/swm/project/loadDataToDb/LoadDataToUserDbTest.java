@@ -45,5 +45,4 @@ public class LoadDataToUserDbTest {
     {
         assertEquals(true,true);
     }
-    
 }
