@@ -17,7 +17,7 @@ import java.util.Set;
  */
  class UserToMovieCluster {
      HashMap<Integer, HashMap<Integer,UserVote>> uToMCLust;
-     
+     HashMap<Integer, Double> avgRatingForUser = new HashMap<>();
      public void setUserToMovieCluster(){
          uToMCLust = new HashMap<>();
                  
@@ -26,7 +26,9 @@ import java.util.Set;
          for(int u:users){
              HashMap<Integer,Integer> movieAndRatings = m.userToMovieRatings.getAllRatedMoviesForBaseUser(u);
              Set<Integer> moviesRatedByUser = movieAndRatings.keySet();
-            double avgRatingForUser = getAvgRatingsForUser(movieAndRatings.values());
+            double avgRating = getAvgRatingsForUser(movieAndRatings.values());
+            avgRatingForUser.put(u, avgRating);
+            
              HashMap<Integer,UserVote> clusterToVote = new HashMap<>();
                     
             if(uToMCLust.containsKey(u))
@@ -38,7 +40,7 @@ import java.util.Set;
                 int voteValue = -1;
                 UserVote userClusterVote;
                 
-                if(userLikesMovie(rating,avgRatingForUser))
+                if(userLikesMovie(rating,u))
                     voteValue = 1;
                 
                 int clusterNumber = m.movieToMovieCluster.getClusterNumber(mov);
@@ -64,8 +66,8 @@ import java.util.Set;
        return sum/(double)values.size();
     }
 
-    private boolean userLikesMovie(int rating, double avgRatingForUser) {
-       return  rating>= avgRatingForUser;
+    public boolean userLikesMovie(int rating, int userid) {
+       return  rating>= avgRatingForUser.get(userid);
     }
      public void calculateUserToClusterProbability(){
          Set<Integer> users = uToMCLust.keySet();
@@ -89,4 +91,6 @@ import java.util.Set;
      public HashMap<Integer, UserVote> getMovieClustersForUser(int userid){
          return uToMCLust.get(userid);
      }
+     
+     
 }
