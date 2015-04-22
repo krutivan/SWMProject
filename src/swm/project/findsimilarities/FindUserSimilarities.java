@@ -28,7 +28,7 @@ public class FindUserSimilarities {
     int simGender [][]=new int[Consts.MAX_USERS][Consts.MAX_USERS];
     int simOccupation [][]=new int[Consts.MAX_USERS][Consts.MAX_USERS];
     double simZip [][]=new double[Consts.MAX_USERS][Consts.MAX_USERS];
-    
+    double finalSim[][]=new double[Consts.MAX_USERS][Consts.MAX_USERS];
     MongoClient mongoClient;
     MongoDatabase db;
     
@@ -44,10 +44,10 @@ public class FindUserSimilarities {
     
     public void findUserSimilarities()
     {
-        //findDistancesForGender();
+        findDistancesForGender();
         //findDistancesForOccupation();
         findDistancesForAge();
-        findRatingsSimilarities();
+        findOverallSimilarities();
     }
     
     private void findDistancesForGender()
@@ -157,8 +157,24 @@ public class FindUserSimilarities {
         pw.close();
     }
     
-    private void findRatingsSimilarities()
+    private void findOverallSimilarities()
     {
-        
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//UserAgeGenderSimilarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for(int i=0;i<Consts.MAX_USERS;i++)
+        {
+            for(int j=0;j<Consts.MAX_USERS;j++)
+            {
+                finalSim[i][j] = Consts.AgeWeight* simAge[i][j] + Consts.GenderWeight * simGender[i][j];
+                pw.print(finalSim[i][j]+",");
+            }
+            pw.println();
+        }
+        pw.close();
     }
 }

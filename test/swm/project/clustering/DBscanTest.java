@@ -80,7 +80,7 @@ public class DBscanTest {
    public void testUserClusteringDBScan() throws IOException{
        
        double[][] matrix = new double[Consts.MAX_USERS][Consts.MAX_USERS];
-        BufferedReader br = new BufferedReader(new FileReader("datafiles//UserSimilarities.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("datafiles//UserAgeGenderSimilarities.csv"));
         String line;
         int i = 0;
         while((line = br.readLine())!=null){
@@ -94,7 +94,7 @@ public class DBscanTest {
         
         DBscan instance = new DBscan(Consts.MAX_USERS, matrix);
         
-        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(10, 0.6);
+        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(2, 0.2);
         PrintWriter pw = new PrintWriter("datafiles//UserCluters.csv");
         if(pw!=null){
             Set<Integer> ks = clusters.keySet();
