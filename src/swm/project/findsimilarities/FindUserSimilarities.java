@@ -45,7 +45,9 @@ public class FindUserSimilarities {
     public void findUserSimilarities()
     {
         //findDistancesForGender();
-        findDistancesForOccupation();
+        //findDistancesForOccupation();
+        findDistancesForAge();
+        findRatingsSimilarities();
     }
     
     private void findDistancesForGender()
@@ -118,5 +120,45 @@ public class FindUserSimilarities {
             pw.println();
         }   
         pw.close();
+    }
+    
+    private void findDistancesForAge()
+    {
+        PrintWriter pw = null;
+        try {
+            
+            pw = new PrintWriter("datafiles//AgeSimilarities.csv");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FindMovieSimilarities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         MongoCollection<Document> userAgeCollection = db.getCollection(Consts.USER_AGE);
+         FindIterable<Document> userAgeAll = userAgeCollection.find();
+        MongoCursor userAgeCursorX = userAgeAll.iterator();
+        
+        while(userAgeCursorX.hasNext()){
+            Document dX = (Document) userAgeCursorX.next();
+            int idX = (int) dX.get("_id");
+            int ageX = (Integer) dX.get(Consts.USER_AGE);
+            MongoCursor userAgeCursorY = userAgeAll.iterator();
+            
+            while(userAgeCursorY.hasNext()){
+                Document dY = (Document) userAgeCursorY.next();
+                int idY = (int) dY.get("_id");
+                int ageY = (Integer)dY.get(Consts.USER_AGE);
+                
+                double simAges = Operations.findSimilarAges(ageX, ageY);
+                simAge[idX-1][idY-1] = simAges;
+                //System.out.print(simAges+",");
+                pw.print(simAges+",");         
+            }
+           // System.out.println("");
+            pw.println();
+        }   
+        pw.close();
+    }
+    
+    private void findRatingsSimilarities()
+    {
+        
     }
 }

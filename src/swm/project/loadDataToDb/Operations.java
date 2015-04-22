@@ -78,6 +78,28 @@ public class Operations{
            return initial;
        }
        
+       public static double findSimilarAges(int age1,int age2)
+       {
+        double numerator=ageSigma(Math.min(age1, age2),Math.max(age1, age2));
+        double denominator=ageSigma(7,73);
+        return numerator/denominator;
+       }
+       
+       public static double ageFunction(double x)
+     {
+         double temp=0.0068*x;
+         double result=276.9*Math.exp(temp);
+         return result;
+     }
+       
+       public static double ageSigma(int min, int max){
+           double initial=ageFunction(min);
+           for (int i = min+1; i <= max; i++) {
+               initial += ageFunction(i);
+           }
+           return initial;
+       }
+       
        public static int findSimilar(String a,String b)
        {
            if(a.equals(b))
