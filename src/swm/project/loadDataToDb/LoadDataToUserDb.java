@@ -66,7 +66,7 @@ public class LoadDataToUserDb {
             MongoCollection<Document> userOccupationCollection = db.getCollection(Consts.USER_OCCUPATION);
          db.createCollection(Consts.USER_ZIP);
             MongoCollection<Document> userZipCollection = db.getCollection(Consts.USER_ZIP);   
-            
+                     
         FileInputStream fis=null;
         BufferedReader br;
         BufferedInputStream bis = null;
