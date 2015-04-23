@@ -18,14 +18,14 @@ import java.util.Set;
  * @author Kruti
  */
 public class MovieRecommender {
-    public List<Integer> getNMovies(int N,int userId, Collection<UserVote> movieClusterVotes){
+    public List<Integer> getNMovies(int N,int userId, List<UserVote> movieClusterVotes){
         
         int numOfMovs =0;
         List<Integer> recommendedMovieIds = new ArrayList<>();
         AllMappings m = AllMappings.getInstance();
         Set<Integer> userHistory = m.userToMovieRatings.getAllRatedMoviesForBaseUser(userId).keySet();
         
-        LinkedList<UserVote> clusters = new LinkedList<>( m.userToMovieCluster.uToMCLust.get(userId).values());
+        LinkedList<UserVote> clusters = new LinkedList<>( movieClusterVotes);
         
         clusters.sort(new Comparator<UserVote>() {
 
@@ -37,7 +37,8 @@ public class MovieRecommender {
             }
         }
         );
-        UserVote cluster = clusters.getFirst();
+        
+        UserVote cluster = clusters.removeFirst();
         
         while(cluster!=null && numOfMovs< N){
             ArrayList<Integer> movsInCluster = new ArrayList<>(m.movieToMovieCluster.getMoviesInCluster(cluster.getClusterId()));
@@ -47,12 +48,14 @@ public class MovieRecommender {
                    numOfMovs++;
                }
            }
+           if(clusters.size()>0)
+            cluster=clusters.removeFirst();
+           else
+               cluster=null;
             
-            clusters.removeFirst();
-            cluster = clusters.getFirst();
             
         }
-        System.out.println(recommendedMovieIds.toString());
+
         return recommendedMovieIds;
         
     }

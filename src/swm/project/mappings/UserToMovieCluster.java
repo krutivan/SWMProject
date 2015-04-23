@@ -5,6 +5,8 @@
  */
 package swm.project.mappings;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,45 +18,42 @@ import java.util.Set;
  * @author Kruti
  */
  class UserToMovieCluster {
-     HashMap<Integer, HashMap<Integer,UserVote>> uToMCLust;
+     HashMap<Integer,List<UserVote>> uToMCLust;
      HashMap<Integer, Double> avgRatingForUser = new HashMap<>();
      public void setUserToMovieCluster(){
          uToMCLust = new HashMap<>();
                  
          AllMappings m = AllMappings.getInstance();
          Set<Integer> users = m.userToMovieRatings.getAllBaseUsers();
+         int numberOfMovieClusters = m.movieToMovieCluster.getNumberOfMovieclusters();
          for(int u:users){
              HashMap<Integer,Integer> movieAndRatings = m.userToMovieRatings.getAllRatedMoviesForBaseUser(u);
              Set<Integer> moviesRatedByUser = movieAndRatings.keySet();
             double avgRating = getAvgRatingsForUser(movieAndRatings.values());
             avgRatingForUser.put(u, avgRating);
             
-             HashMap<Integer,UserVote> clusterToVote = new HashMap<>();
-                    
+            List<UserVote> userVoteForCluster = new ArrayList<>(numberOfMovieClusters);
+            for(int i=0;i<numberOfMovieClusters;i++)
+                userVoteForCluster.add(new UserVote(i, m.movieToMovieCluster.getClusterSize(i)));
+            
             if(uToMCLust.containsKey(u))
-                clusterToVote = uToMCLust.get(u);
+                userVoteForCluster = uToMCLust.get(u);
             
                 
             for(int mov: moviesRatedByUser){
                 int rating = movieAndRatings.get(mov);
                 int voteValue = -1;
-                UserVote userClusterVote;
+                
                 
                 if(userLikesMovie(rating,u))
                     voteValue = 1;
                 
                 int clusterNumber = m.movieToMovieCluster.getClusterNumber(mov);
                 
-                if(clusterToVote.containsKey(clusterNumber))
-                    userClusterVote = clusterToVote.get(clusterNumber);
-                else
-                    userClusterVote = new UserVote(clusterNumber, m.movieToMovieCluster.getClusterSize(clusterNumber));
-                
-                userClusterVote.incrementVote(voteValue);
-                clusterToVote.put(clusterNumber, userClusterVote);
-                
+               
+                userVoteForCluster.get(clusterNumber).incrementVote(voteValue);
             }
-            uToMCLust.put(u, clusterToVote);
+            uToMCLust.put(u, userVoteForCluster);
          }
      }
      
@@ -73,14 +72,13 @@ import java.util.Set;
          Set<Integer> users = uToMCLust.keySet();
          for(int u: users){
              int totalVotes  = 0;
-             HashMap<Integer,UserVote> userToClusterVotes = uToMCLust.get(u);
-             Collection<UserVote> votes = userToClusterVotes.values();
-             
+             List<UserVote> votes = uToMCLust.get(u);
+
              for(UserVote uv: votes){
                  totalVotes+= uv.getVotes();
              }
-             for(int clusterNumber: userToClusterVotes.keySet()){
-                 UserVote uv = userToClusterVotes.get(clusterNumber);
+             for(int clusterNumber=0; clusterNumber<AllMappings.getInstance().movieToMovieCluster.getNumberOfMovieclusters();clusterNumber++){
+                 UserVote uv = votes.get(clusterNumber);
                  uv.calcProb(totalVotes);
              }
          }
@@ -88,9 +86,23 @@ import java.util.Set;
                 
      }
      
-     public HashMap<Integer, UserVote> getMovieClustersForUser(int userid){
+     public List<UserVote> getMovieClustersForUser(int userid){
          return uToMCLust.get(userid);
      }
      
+     public void putUserToMovieClustersToFile(String fileName) throws FileNotFoundException{
+         PrintWriter pw = new PrintWriter(fileName);
+         pw.write("User ID");
+         for(int i=0;i<AllMappings.getInstance().movieToMovieCluster.getNumberOfMovieclusters();i++)
+             pw.write(",Cluster "+i);
+         for(int u:uToMCLust.keySet()){
+             pw.write("\n"+u);
+             for(UserVote v: uToMCLust.get(u)){
+                pw.write(","+v.getProb());
+             }
+//             
+         }
+         pw.close();
+     }
      
 }

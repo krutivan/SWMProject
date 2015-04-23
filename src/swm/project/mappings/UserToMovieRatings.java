@@ -5,6 +5,10 @@
  */
 package swm.project.mappings;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 import swm.project.loadDataToDb.GetDataFromDb;
@@ -14,8 +18,8 @@ import swm.project.loadDataToDb.GetDataFromDb;
  * @author Kruti
  */
  class UserToMovieRatings {
-   HashMap<Integer, HashMap<Integer,Integer>> base;
-   HashMap<Integer, HashMap<Integer,Integer>> test;
+   private HashMap<Integer, HashMap<Integer,Integer>> base;
+   private HashMap<Integer, HashMap<Integer,Integer>> test;
     
    public void setUserRatingsAll(){
        GetDataFromDb gdb = new GetDataFromDb();
@@ -27,8 +31,45 @@ import swm.project.loadDataToDb.GetDataFromDb;
     * @param baseFile base file from which to read user movie Ratings
     * @param testFile test file
     */
-   public void setUserRatingsBaseAndTest(String baseFile, String testFile){
-       
+   public void setUserRatingsBaseAndTest(String baseFile, String testFile) throws FileNotFoundException, IOException{
+       base = new HashMap<>();
+       test=new  HashMap<>();
+       BufferedReader br = new BufferedReader(new FileReader(baseFile));
+        String line;
+        int userId,movId,rating;
+        while((line = br.readLine())!=null){
+            String vals[] = line.split("\t");
+            userId = Integer.parseInt(vals[0]);
+            movId = Integer.parseInt(vals[1]);
+            rating = Integer.parseInt(vals[2]);
+          
+            HashMap<Integer,Integer> movRatings;
+            if(base.containsKey(userId))
+                movRatings = base.get(userId);
+            else
+                movRatings=new HashMap<>();
+            
+            movRatings.put(movId, rating);
+            base.put(userId, movRatings);
+        }
+        
+        br = new BufferedReader(new FileReader(testFile));
+        
+        while((line = br.readLine())!=null){
+            String vals[] = line.split("\t");
+            userId = Integer.parseInt(vals[0]);
+            movId = Integer.parseInt(vals[1]);
+            rating = Integer.parseInt(vals[2]);
+          
+            HashMap<Integer,Integer> movRatings;
+            if(test.containsKey(userId))
+                movRatings = test.get(userId);
+            else
+                movRatings=new HashMap<>();
+            
+            movRatings.put(movId, rating);
+            test.put(userId, movRatings);
+        }
    }
    
    public HashMap<Integer,Integer> getAllRatedMoviesForBaseUser(int userId){
@@ -48,7 +89,9 @@ import swm.project.loadDataToDb.GetDataFromDb;
        return base.keySet();
    }
    
-   
+   public Set<Integer> getAllTestUsers(){
+       return test.keySet();
+   }
    
    
 }

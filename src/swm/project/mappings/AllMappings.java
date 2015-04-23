@@ -5,8 +5,11 @@
  */
 package swm.project.mappings;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -38,7 +41,11 @@ public class AllMappings {
     }
     public void initUserRatings(String base, String test){
         userToMovieRatings = new UserToMovieRatings();
-        userToMovieRatings.setUserRatingsBaseAndTest(base, test);
+        try {
+            userToMovieRatings.setUserRatingsBaseAndTest(base, test);
+        } catch (IOException ex) {
+            System.err.println("base or test file does NOT exit"+ex.getMessage());
+        }
     }
    
     public void initUsertoMovieCluster(){
@@ -49,8 +56,26 @@ public class AllMappings {
     
     public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies)
     {
-        return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId).values());
-        
+        return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId));
     }
     
+    public MeasurementMetrics getMeasurementMetricsForUser(int userId, List<Integer> predictedMovieIds)
+    {
+        MeasurementMetrics m = new MeasurementMetrics(userId, predictedMovieIds);
+        return m;
+    }
+    
+    public HashMap<Integer, MeasurementMetrics> getMeasurementMetricsForAllTestUsers(int numberOfMovies){
+        Set<Integer> testUsers = userToMovieRatings.getAllTestUsers();
+        HashMap<Integer,MeasurementMetrics> metricsForTestUsers = new HashMap<>();
+        for(int user: testUsers){
+            MeasurementMetrics m = getMeasurementMetricsForUser(user, reccomendMoviesForuser(user, numberOfMovies));
+            metricsForTestUsers.put(user, m);
+        }
+        return metricsForTestUsers;
+    }
+    
+    public void writeUserToMovieClustersToFile() throws FileNotFoundException{
+        userToMovieCluster.putUserToMovieClustersToFile("datafiles//userToMovieCluster.csv");
+    }
 }
