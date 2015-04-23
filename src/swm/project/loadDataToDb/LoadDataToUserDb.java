@@ -66,7 +66,7 @@ public class LoadDataToUserDb {
             MongoCollection<Document> userOccupationCollection = db.getCollection(Consts.USER_OCCUPATION);
          db.createCollection(Consts.USER_ZIP);
             MongoCollection<Document> userZipCollection = db.getCollection(Consts.USER_ZIP);   
-            
+                     
         FileInputStream fis=null;
         BufferedReader br;
         BufferedInputStream bis = null;
@@ -83,7 +83,7 @@ public class LoadDataToUserDb {
                 addUserAge(c,Integer.parseInt(fields[1]),userAgeCollection);
                 addUserGender(c,fields[2],userGenderCollection);
                 addUserOccupation(c,fields[3],userOccupationCollection);
-                addUserZip(c,Integer.parseInt(fields[4]),userZipCollection);
+                addUserZip(c,fields[4],userZipCollection);
                 c++;
             }
         } catch (FileNotFoundException ex) {
@@ -117,11 +117,11 @@ public class LoadDataToUserDb {
         userOccupationCollection.insertOne(d);
     }
     
-    private void addUserZip(int id, int age, MongoCollection<Document> userZipCollection)
+    private void addUserZip(int id, String zip, MongoCollection<Document> userZipCollection)
     {
         Document d = new Document();  
         d.put("_id", id);
-        d.put(Consts.USER_ZIP, age);
+        d.put(Consts.USER_ZIP, zip);
         userZipCollection.insertOne(d);
     }
     

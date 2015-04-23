@@ -9,7 +9,10 @@ import java.lang.Math.*;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 import swm.project.Consts;
+import swm.project.loadDataToDb.Operations;
 
 /**
  *
@@ -73,6 +76,7 @@ public class SimilarityOperations {
         return  sum/vector.size();
     }
     
+    
     public double findSimilarity(ArrayList<Double> vector1, ArrayList<Double> vector2){  
         double commonFeatureDist=0,differentFeatureDistance=0;
         double numberOfRankedItems1=0, numberOfRankedItems2=0, commonRanked = 0;
@@ -94,6 +98,9 @@ public class SimilarityOperations {
         return (commonFeatureDist/(commonFeatureDist+differentFeatureDistance));
     }
     
+    
+   /*
+    Kulvir & Sagar's old implementation
     public double findJacUOD(ArrayList<Integer> vector1, ArrayList<Integer> vector2){
         double commonFeatureDist=0,differentFeatureDistance=0;
         double simuv=0,numerator=0,denominator=0;
@@ -128,5 +135,6 @@ public class SimilarityOperations {
         simuv=(suv/suunionsv)*(numerator/denominator);
         return simuv;
     }
+    */
 }
 

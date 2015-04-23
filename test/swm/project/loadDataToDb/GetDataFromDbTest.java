@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -53,6 +54,7 @@ public class GetDataFromDbTest {
     /**
      * Test of getAllUserRatings method, of class GetDataFromDb.
      */
+    
     @Test
     public void getAllUserRatingsTest()
     {
@@ -81,5 +83,15 @@ public class GetDataFromDbTest {
         }           
         pw.close();
         assertEquals(true,true);
+    }
+    
+    @Test
+    @SuppressWarnings("empty-statement")
+    public void getMovieDetailsTest()
+    {
+        GetDataFromDb gb=new GetDataFromDb();
+        List<Integer> ids=Arrays.asList(1,5,4,2,8);
+        List<String> output=gb.getMovieDetails(ids);
+        System.out.println(output);
     }
 }

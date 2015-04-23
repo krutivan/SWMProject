@@ -85,13 +85,13 @@ public class SimilarityOperationsTest {
         }
         pw.close();
     }
-
+    
     public double jacUOD(HashMap<Integer,Integer> user1, HashMap<Integer,Integer> user2){
        Set<Integer> user1Items = user1.keySet();
        Set<Integer> user2Items = user2.keySet();
        Set<Integer> intersection = Operations.intersection(user1Items, user2Items);
        double unionSize = user1Items.size() + user2Items.size() - intersection.size();
-       double denominator = 0, numerator = sqrt(Consts.MAX_USERS * pow(MAX_RATING-MIN_RATING, 2));
+       double denominator = 0, numerator = sqrt(Consts.MAX_MOVIES * pow(MAX_RATING-MIN_RATING, 2));
       
        
        for(int item: intersection){
@@ -104,6 +104,8 @@ public class SimilarityOperationsTest {
        return (((double)intersection.size()/unionSize) * numerator/denominator);
        
    }
+
+    
     
     
     /**

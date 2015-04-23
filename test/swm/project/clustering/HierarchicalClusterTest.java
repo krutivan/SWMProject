@@ -25,7 +25,7 @@ import swm.project.Consts;
  * @author Kruti
  */
 public class HierarchicalClusterTest {
-     double[][] matrix = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
+     double[][] matrix = new double[Consts.MAX_USERS][Consts.MAX_USERS];
      
     public HierarchicalClusterTest() {
     }
@@ -48,12 +48,12 @@ public class HierarchicalClusterTest {
     }
     @Test
     public void ClusterUsingHCTest() throws IOException{
-        double[][] matrix = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
-        BufferedReader br = new BufferedReader(new FileReader("datafiles//OverallSimilarities.csv"));
+        double[][] matrix = new double[Consts.MAX_USERS][Consts.MAX_USERS];
+        BufferedReader br = new BufferedReader(new FileReader("datafiles//UserSimilarities.csv"));
         String line;
         int i = 0;
         while((line = br.readLine())!=null){
-            String vals[] = line.split(",");
+            String vals[] = line.trim().split(",");
             for(int j=0;j<vals.length;j++){
                 matrix[i][j] = Double.parseDouble(vals[j]);
                 
@@ -61,7 +61,7 @@ public class HierarchicalClusterTest {
             i++;
         }
         
-        HeirarchicalClustering instance = new HeirarchicalClustering(Consts.MAX_MOVIES, matrix);
+        HeirarchicalClustering instance = new HeirarchicalClustering(Consts.MAX_USERS, matrix);
         
         
         com.apporiented.algorithm.clustering.Cluster Cluster = instance.ClusterUsingHC();  

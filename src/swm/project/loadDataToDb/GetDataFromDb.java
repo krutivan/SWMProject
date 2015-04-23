@@ -5,14 +5,20 @@
  */
 package swm.project.loadDataToDb;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.bson.Document;
 import swm.project.Consts;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -64,5 +70,27 @@ public class GetDataFromDb {
             }       
         }
         return userRatings;
+    }
+    
+    public List<String> getMovieDetails(List<Integer> movieID)
+    {
+        MongoCollection<Document> movieNamesCollection = db.getCollection(Consts.MOVIE_NAME_DATA);
+         //FindIterable<Document> movieNamesAll = movieNamesCollection.find();
+         //MongoCursor movieNamesCursorX = movieNamesAll.iterator();
+         ArrayList<String> names = new ArrayList<>();
+         BasicDBObject whereQuery = new BasicDBObject();
+         for(int i=0;i<movieID.size();i++)
+         {
+            whereQuery.put("_id", movieID.get(i));
+             FindIterable<Document> iterate = movieNamesCollection.find(whereQuery);
+         MongoCursor cursor = iterate.iterator();
+	 while(cursor.hasNext()) {
+	    Document ratingFields = (Document) cursor.next();
+            String movieName= (String) ratingFields.get(Consts.MOVIE_NAME_FIELD);
+            //System.out.println(movieName);          
+            names.add(movieName);
+	}
+         }
+	return names;
     }
 }

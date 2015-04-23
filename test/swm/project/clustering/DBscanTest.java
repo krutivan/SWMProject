@@ -46,8 +46,8 @@ public class DBscanTest {
     
     @Before
     public void setUp() throws IOException {
-         int numOfItems = 0;
-        double[][] matrix = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
+         
+        /*double[][] matrix = new double[Consts.MAX_MOVIES][Consts.MAX_MOVIES];
         BufferedReader br = new BufferedReader(new FileReader("datafiles//OverallSimilarities.csv"));
         String line;
         int i = 0;
@@ -72,8 +72,39 @@ public class DBscanTest {
             }
         }
         pw.close();
-        
+        */
+        testClusterUsingDBScan();
     }
+    
+   @Test 
+   public void testUserClusteringDBScan() throws IOException{
+       
+       double[][] matrix = new double[Consts.MAX_USERS][Consts.MAX_USERS];
+        BufferedReader br = new BufferedReader(new FileReader("datafiles//UserAgeGenderSimilarities.csv"));
+        String line;
+        int i = 0;
+        while((line = br.readLine())!=null){
+            String vals[] = line.trim().split(",");
+            for(int j=0;j<vals.length;j++){
+                matrix[i][j] = Double.parseDouble(vals[j]);
+                
+            }
+            i++;
+        }
+        
+        DBscan instance = new DBscan(Consts.MAX_USERS, matrix);
+        
+        HashMap<Integer,ClusterPoint> clusters = instance.ClusterUsingDBScan(2, 0.2);
+        PrintWriter pw = new PrintWriter("datafiles//UserCluters.csv");
+        if(pw!=null){
+            Set<Integer> ks = clusters.keySet();
+            for(Integer k:ks){
+                pw.write(k+","+clusters.get(k).getClusterNumber()+"\n");
+
+            }
+        }
+        pw.close();
+   }
     
     @After
     public void tearDown() {
