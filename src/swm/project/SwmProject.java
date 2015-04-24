@@ -26,11 +26,12 @@ public class SwmProject {
      */
     public static void main(String[] args) throws IOException {
         //loadAllDataToDb();
-        //findSimilarities();
-        findMetricForAllBaseAndTest();
+       // findSimilarities();
+        //findMetricForAllBaseAndTest();
         
       
-//        AllMappings m = AllMappings.getInstance();
+        AllMappings m = AllMappings.getInstance();
+        m.initUserClustersFromMovieClusters();
 //        m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
 //        m.initUserRatings("datafiles//baseandtest//u1.base","datafiles//baseandtest//u1.test");
 //        m.initUsertoMovieCluster();
@@ -55,11 +56,12 @@ public class SwmProject {
         AllMappings m = AllMappings.getInstance();
         try {
             m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
-            for(int i=1;i<=5;i++){
+            for(int i=1;i<=1;i++){
                 m.initUserRatings("datafiles//baseandtest//u"+i+".base","datafiles//baseandtest//u"+i+".test"); 
                 m.initUsertoMovieCluster();
                 m.writeUserToMovieClustersToFile();
-                for (int j = 10; j <= 50; j+=10) {
+                m.initUserClustersFromMovieClusters();
+                for (int j = 50; j <= 50; j+=10) {
                     HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j);
                     String filename = "datafiles//baseandtest//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);

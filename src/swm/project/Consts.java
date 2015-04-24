@@ -32,9 +32,9 @@ public final class Consts {
     public static final int MAX_USERS=943;
     //Weights
     public static final double ActorWeight=0.1;
-    public static final double DirectorWeight=0.1;
+    public static final double DirectorWeight=0.05;
     public static final double GenreWeight=0.75;
-    public static final double DateWeight=0.05;
+    public static final double DateWeight=0.1;
     
     public static final double AgeWeight=0.5;
     public static final double GenderWeight=0.5;
