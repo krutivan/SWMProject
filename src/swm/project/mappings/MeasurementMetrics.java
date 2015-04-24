@@ -43,9 +43,7 @@ public class MeasurementMetrics {
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
-        System.out.println(actualTestRatings.keySet().toString());
-        System.out.println("-----------------------------------------------------------");
-        System.out.println(allPredicted.toString());
+
         predictedPositiveMovies = Operations.intersection(actualTestRatings.keySet(), allPredicted);
         for(int movId: actualTestRatings.keySet()){
             if(m.userToMovieCluster.userLikesMovie(actualTestRatings.get(movId), userid))

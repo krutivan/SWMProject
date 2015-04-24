@@ -21,6 +21,7 @@ public class AllMappings {
     public UserToMovieRatings userToMovieRatings;
     public UserToMovieCluster userToMovieCluster;
     private MovieRecommender movieReccommender;
+    private UserToUserCluster userToUserCluster;
     private AllMappings(){
         movieReccommender = new MovieRecommender();
     }
@@ -54,6 +55,11 @@ public class AllMappings {
         userToMovieCluster.calculateUserToClusterProbability();
     }
     
+    public void initUserClustersFromMovieClusters(){
+        userToUserCluster = new UserToUserCluster();
+        userToUserCluster.clusterUsersFromUserToMovieCluster(MappingConstants.KMEANS);
+    }
+    
     public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies)
     {
         return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId));
@@ -76,6 +82,6 @@ public class AllMappings {
     }
     
     public void writeUserToMovieClustersToFile() throws FileNotFoundException{
-        userToMovieCluster.putUserToMovieClustersToFile("datafiles//userToMovieCluster.csv");
+        userToMovieCluster.putUserToMovieClustersToFile(MappingConstants.USER_MOVIE_CLUSTERS);
     }
 }
