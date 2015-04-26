@@ -56,7 +56,7 @@ import swm.project.Consts;
         return clustToMov.get(clusterNum);
     }
     
-    int getNumberOfMovieclusters(){
+    public int getNumberOfMovieclusters(){
         return clustToMov.keySet().size();
     }
 }

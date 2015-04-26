@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author Kruti
  */
 public class MovieRecommender {
@@ -59,4 +58,24 @@ public class MovieRecommender {
         return recommendedMovieIds;
         
     }
+     public List<Integer> getNMovies(int N,int userId){
+         AllMappings m = AllMappings.getInstance();
+         int userClusterNum =m.userToUserCluster.getClusterNumberForUser(userId, MappingConstants.USER_HISTORY_CLUSTER);
+         int numOfMovs=0;
+         FinalScores fs = m.userClusterToMovieCluster.getFinalScoresForUserCluster(userClusterNum, MappingConstants.USER_HISTORY_CLUSTER);
+         LinkedList<Integer> sortedMovClusts = new LinkedList<>(fs.getSortedMovClusters());
+         Set<Integer> userPast = m.userToMovieRatings.getAllRatedMoviesForBaseUser(userId).keySet();
+         List<Integer> recommendedMovieIds = new ArrayList<>();
+         while(sortedMovClusts.size()>0 && numOfMovs < N){
+             int cluster = sortedMovClusts.removeFirst();
+               ArrayList<Integer> movsInCluster = new ArrayList<>(m.movieToMovieCluster.getMoviesInCluster(cluster));
+            for(int mov: movsInCluster){
+                if(!userPast.contains(mov)){
+                    recommendedMovieIds.add(mov);
+                    numOfMovs++;
+                }
+            }   
+        }
+         return  recommendedMovieIds;
+     }
 }

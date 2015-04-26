@@ -8,11 +8,13 @@ package swm.project;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import swm.project.findsimilarities.FindMovieSimilarities;
 import swm.project.loadDataToDb.LoadDataToDb;
 import swm.project.mappings.AllMappings;
+import swm.project.mappings.MappingConstants;
 import swm.project.mappings.MeasurementMetrics;
 
 /**
@@ -27,14 +29,20 @@ public class SwmProject {
     public static void main(String[] args) throws IOException {
         //loadAllDataToDb();
        // findSimilarities();
-        //findMetricForAllBaseAndTest();
-        
+       //findMetricForAllBaseAndTest();
+       findMetricForAllBaseAndTestMatrix();
       
         AllMappings m = AllMappings.getInstance();
-        m.initUserClustersFromMovieClusters();
+        
 //        m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
-//        m.initUserRatings("datafiles//baseandtest//u1.base","datafiles//baseandtest//u1.test");
+//        m.initUserRatings();
+//        //m.initUserRatings("datafiles//baseandtest//u1.base","datafiles//baseandtest//u1.test");
 //        m.initUsertoMovieCluster();
+//        m.initUserClustersFromMovieClusters();
+//        m.initUserClusterToMovieCluster();
+//        List<Integer> movs = m.reccomendMoviesForuser(1, 30, MappingConstants.MATRIX_RECOMMENDATION);
+//        System.out.println(movs.toString());
+//        
 //        m.writeUserToMovieClustersToFile();
 //        MeasurementMetrics meas = m.getMeasurementMetricsForUser(1, m.reccomendMoviesForuser(1, 1600));
 //        System.out.println(meas.getPrecision()+ "   "+ meas.getRecall());
@@ -59,11 +67,44 @@ public class SwmProject {
             for(int i=1;i<=1;i++){
                 m.initUserRatings("datafiles//baseandtest//u"+i+".base","datafiles//baseandtest//u"+i+".test"); 
                 m.initUsertoMovieCluster();
-                m.writeUserToMovieClustersToFile();
+                m.writeUserToMovieClustersToFile("ARFF");
                 m.initUserClustersFromMovieClusters();
+                m.initUserClusterToMovieCluster();
                 for (int j = 50; j <= 50; j+=10) {
-                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j);
+                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION);
                     String filename = "datafiles//baseandtest//measure//u"+i+"//measure"+j+".csv";
+                    PrintWriter pw = new PrintWriter(filename);
+                    pw.print("Userid, Precision, Recall");
+                    for(int userId: measurements.keySet()){
+                        pw.print("\n");
+                        pw.print(userId);
+                        pw.print(",");
+                        pw.print(measurements.get(userId).getPrecision());
+                        pw.print(",");
+                        pw.print(measurements.get(userId).getRecall());
+                        
+                    }
+                    pw.close();
+                }
+            }                       
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    private static void findMetricForAllBaseAndTestMatrix() {
+        AllMappings m = AllMappings.getInstance();
+        try {
+            m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
+            for(int i=1;i<=1;i++){
+                m.initUserRatings("datafiles//baseandtestmatrix//u"+i+".base","datafiles//baseandtest//u"+i+".test"); 
+                m.initUsertoMovieCluster();
+                m.writeUserToMovieClustersToFile("ARFF");
+                m.initUserClustersFromMovieClusters();
+                m.initUserClusterToMovieCluster();
+                for (int j = 50; j <= 50; j+=10) {
+                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION);
+                    String filename = "datafiles//baseandtestmatrix//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);
                     pw.print("Userid, Precision, Recall");
                     for(int userId: measurements.keySet()){

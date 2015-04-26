@@ -90,7 +90,7 @@ import java.util.Set;
          return uToMCLust.get(userid);
      }
      
-     public void putUserToMovieClustersToFile(String fileName) throws FileNotFoundException{
+     public void putUserToMovieClustersToCsvFile(String fileName) throws FileNotFoundException{
          PrintWriter pw = new PrintWriter(fileName);
          pw.write("User ID");
          for(int i=0;i<AllMappings.getInstance().movieToMovieCluster.getNumberOfMovieclusters();i++)
@@ -100,7 +100,24 @@ import java.util.Set;
              for(UserVote v: uToMCLust.get(u)){
                 pw.write(","+v.getProb());
              }
-//             
+         }
+         pw.close();
+     }
+     public void putUserToMovieClustersToArffFile(String fileName, String relationName) throws FileNotFoundException{
+         int numOfClusters = AllMappings.getInstance().movieToMovieCluster.getNumberOfMovieclusters();
+                
+         PrintWriter pw = new PrintWriter(fileName);
+         pw.write("@relation "+relationName+"\n\n");
+         pw.write("@attribute \'User Id\' numeric\n");
+         for (int i = 0; i < numOfClusters; i++) {
+             pw.write("@attribute \'Mov Cluster "+i+"\' numeric\n");
+         }
+        pw.write("\n@data\n");
+          for(int u:uToMCLust.keySet()){
+             pw.write("\n"+u);
+             for(UserVote v: uToMCLust.get(u)){
+                pw.write(","+v.getProb());
+             }
          }
          pw.close();
      }

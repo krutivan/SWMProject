@@ -21,15 +21,17 @@ public class AllMappings {
     public UserToMovieRatings userToMovieRatings;
     public UserToMovieCluster userToMovieCluster;
     private MovieRecommender movieReccommender;
-    private UserToUserCluster userToUserCluster;
+    public UserToUserCluster userToUserCluster;
+    public UserClusterToMovieCluster userClusterToMovieCluster;
     private AllMappings(){
         movieReccommender = new MovieRecommender();
     }
     
     public static AllMappings getInstance(){
         return mappings;
+        
     }
-            
+    
     
     public void initMovieClusters(String movieClusterFile) throws IOException{
         movieToMovieCluster = new MovieToMovieCluster();
@@ -60,9 +62,17 @@ public class AllMappings {
         userToUserCluster.clusterUsersFromUserToMovieCluster(MappingConstants.KMEANS);
     }
     
-    public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies)
+    public void initUserClusterToMovieCluster(){
+        userClusterToMovieCluster =  new UserClusterToMovieCluster();
+        
+    }
+    
+    public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies, int recommendationType)
     {
-        return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId));
+        if(recommendationType==MappingConstants.HINDAWI_RECOMMENDATION)
+            return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId));
+        else
+            return movieReccommender.getNMovies(numberOfMovies, userId);
     }
     
     public MeasurementMetrics getMeasurementMetricsForUser(int userId, List<Integer> predictedMovieIds)
@@ -71,17 +81,20 @@ public class AllMappings {
         return m;
     }
     
-    public HashMap<Integer, MeasurementMetrics> getMeasurementMetricsForAllTestUsers(int numberOfMovies){
+    public HashMap<Integer, MeasurementMetrics> getMeasurementMetricsForAllTestUsers(int numberOfMovies, int RecommendationType){
         Set<Integer> testUsers = userToMovieRatings.getAllTestUsers();
         HashMap<Integer,MeasurementMetrics> metricsForTestUsers = new HashMap<>();
         for(int user: testUsers){
-            MeasurementMetrics m = getMeasurementMetricsForUser(user, reccomendMoviesForuser(user, numberOfMovies));
+            MeasurementMetrics m = getMeasurementMetricsForUser(user, reccomendMoviesForuser(user, numberOfMovies,RecommendationType));
             metricsForTestUsers.put(user, m);
         }
         return metricsForTestUsers;
     }
     
-    public void writeUserToMovieClustersToFile() throws FileNotFoundException{
-        userToMovieCluster.putUserToMovieClustersToFile(MappingConstants.USER_MOVIE_CLUSTERS);
+    public void writeUserToMovieClustersToFile(String Filetype) throws FileNotFoundException{
+        if(Filetype.equals("CSV"))
+            userToMovieCluster.putUserToMovieClustersToCsvFile(MappingConstants.USER_MOVIE_CLUSTERS);
+        else
+            userToMovieCluster.putUserToMovieClustersToArffFile(MappingConstants.USER_MOVIE_CLUSTERS, "UserToMovClusters");
     }
 }

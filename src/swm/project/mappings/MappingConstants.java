@@ -15,4 +15,12 @@ public final class MappingConstants {
     
     //filnames
     public static final String USER_MOVIE_CLUSTERS = "datafiles//userToMovieCluster.arff";
+    
+    //user cluster Type
+    public static final int USER_HISTORY_CLUSTER = 0;
+    public static final int USER_PROFILE_CLUSTER = 0;
+    
+    //recommendation TYpe
+    public static final int HINDAWI_RECOMMENDATION = 0;
+    public static final int MATRIX_RECOMMENDATION = 1;
 }

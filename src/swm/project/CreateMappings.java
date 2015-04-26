@@ -5,8 +5,6 @@
  */
 package swm.project;
 
-import com.sun.javafx.font.freetype.HBGlyphLayout;
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
