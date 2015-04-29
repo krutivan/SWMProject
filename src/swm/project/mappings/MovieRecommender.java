@@ -58,11 +58,11 @@ public class MovieRecommender {
         return recommendedMovieIds;
         
     }
-     public List<Integer> getNMovies(int N,int userId){
+     public List<Integer> getNMovies(int N,int userId, int userClusterType){
          AllMappings m = AllMappings.getInstance();
-         int userClusterNum =m.userToUserCluster.getClusterNumberForUser(userId, MappingConstants.USER_HISTORY_CLUSTER);
+         int userClusterNum =m.userToUserCluster.getClusterNumberForUser(userId, userClusterType);
          int numOfMovs=0;
-         FinalScores fs = m.userClusterToMovieCluster.getFinalScoresForUserCluster(userClusterNum, MappingConstants.USER_HISTORY_CLUSTER);
+         FinalScores fs = m.userClusterToMovieCluster.getFinalScoresForUserCluster(userClusterNum, userClusterType);
          LinkedList<Integer> sortedMovClusts = new LinkedList<>(fs.getSortedMovClusters());
          Set<Integer> userPast = m.userToMovieRatings.getAllRatedMoviesForBaseUser(userId).keySet();
          List<Integer> recommendedMovieIds = new ArrayList<>();

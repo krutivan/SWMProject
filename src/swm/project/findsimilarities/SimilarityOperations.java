@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Set;
 import swm.project.Consts;
 import swm.project.loadDataToDb.Operations;
+import swm.project.mappings.AllMappings;
 
 /**
  *
@@ -99,12 +100,11 @@ public class SimilarityOperations {
     }
     
     
-   /*
-    Kulvir & Sagar's old implementation
-    public double findJacUOD(ArrayList<Integer> vector1, ArrayList<Integer> vector2){
+   
+    public double findJacUOD(ArrayList<Double> vector1, ArrayList<Double> vector2){
         double commonFeatureDist=0,differentFeatureDistance=0;
         double simuv=0,numerator=0,denominator=0;
-        int su=0, sv=0, suv = 0, suunionsv=0;
+        double su=0, sv=0, suv = 0, suunionsv=0;
         boolean flag=false;
         
         for(int i=0;i<vector1.size();i++)
@@ -126,7 +126,7 @@ public class SimilarityOperations {
              
         }
         suunionsv=su+sv-suv;
-        numerator=sqrt(Consts.MAX_MOVIES*pow((MAX_RATING-MIN_RATING),2));
+        numerator=sqrt(18*pow((1-0),2));
         System.out.println(suv + " " + numerator);
         if(flag)
             denominator=sqrt(denominator);
@@ -135,6 +135,6 @@ public class SimilarityOperations {
         simuv=(suv/suunionsv)*(numerator/denominator);
         return simuv;
     }
-    */
+   
 }
 

@@ -13,13 +13,14 @@ import java.util.List;
  * @author Kruti
  */
 public class UserClusterToMovieCluster {
-    List<List<Integer>> uClustToMClustProfile;
+    HashMap<Integer, FinalScores> uClustToMClustProfile;
     
     HashMap<Integer, FinalScores> uClustToMClustHistory;
 
     public UserClusterToMovieCluster() {
-       
+        
         initMatrixFromHistory();
+        initMatrixFromProfile();
                 
     }
     
@@ -42,14 +43,20 @@ public class UserClusterToMovieCluster {
 
   
     private void initMatrixFromProfile(){
-      
-        
+        AllMappings m = AllMappings.getInstance();
+        uClustToMClustProfile = new HashMap<>();
+       for(int userClusterNumber: m.userToUserCluster.userClustersToUsersProfile.keySet()){
+          FinalScores fs = new FinalScores(userClusterNumber, MappingConstants.USER_PROFILE_CLUSTER);
+          fs.calculateAllScores();
+          uClustToMClustProfile.put(userClusterNumber, fs);
+        }
     }
     
     public FinalScores getFinalScoresForUserCluster(int userClusterNumber, int UserClusterType){
         if(UserClusterType == MappingConstants.USER_HISTORY_CLUSTER)
             return uClustToMClustHistory.get(userClusterNumber);
-        return null;
+        else
+            return uClustToMClustProfile.get(userClusterNumber);
     }
             
 }

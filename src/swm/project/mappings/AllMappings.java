@@ -7,9 +7,11 @@ package swm.project.mappings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import swm.project.loadDataToDb.Operations;
 
 /**
  *
@@ -57,9 +59,9 @@ public class AllMappings {
         userToMovieCluster.calculateUserToClusterProbability();
     }
     
-    public void initUserClustersFromMovieClusters(){
+    public void initUserToUserClusters(){
         userToUserCluster = new UserToUserCluster();
-        userToUserCluster.clusterUsersFromUserToMovieCluster(MappingConstants.KMEANS);
+        userToUserCluster.clusterUsers(MappingConstants.KMEANS);
     }
     
     public void initUserClusterToMovieCluster(){
@@ -67,12 +69,25 @@ public class AllMappings {
         
     }
     
-    public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies, int recommendationType)
+    public List<Integer> reccomendMoviesForuser(int userId, int numberOfMovies, int recommendationType, int userClusterType)
     {
         if(recommendationType==MappingConstants.HINDAWI_RECOMMENDATION)
             return movieReccommender.getNMovies(numberOfMovies, userId,userToMovieCluster.getMovieClustersForUser(userId));
-        else
-            return movieReccommender.getNMovies(numberOfMovies, userId);
+        else{
+            List <Integer> userProfileRec, userHistoryRec, finalRec;
+            if(userClusterType == MappingConstants.USER_HISTORY_CLUSTER || userClusterType == MappingConstants.USER_PROFILE_CLUSTER)
+                return  movieReccommender.getNMovies(numberOfMovies, userId, userClusterType);
+            else{
+                    userProfileRec = movieReccommender.getNMovies(numberOfMovies, userId, MappingConstants.USER_PROFILE_CLUSTER);
+                    userHistoryRec = movieReccommender.getNMovies(numberOfMovies, userId, MappingConstants.USER_HISTORY_CLUSTER);
+//                    finalRec = new ArrayList<>();
+//                    finalRec.addAll(userProfileRec);
+//                    finalRec.addAll(userHistoryRec);
+//                    return finalRec;
+                    return new ArrayList<>(Operations.intersection(userProfileRec, userHistoryRec));
+            }
+            
+        }
     }
     
     public MeasurementMetrics getMeasurementMetricsForUser(int userId, List<Integer> predictedMovieIds)
@@ -81,11 +96,11 @@ public class AllMappings {
         return m;
     }
     
-    public HashMap<Integer, MeasurementMetrics> getMeasurementMetricsForAllTestUsers(int numberOfMovies, int RecommendationType){
+    public HashMap<Integer, MeasurementMetrics> getMeasurementMetricsForAllTestUsers(int numberOfMovies, int RecommendationType, int userClusterType){
         Set<Integer> testUsers = userToMovieRatings.getAllTestUsers();
         HashMap<Integer,MeasurementMetrics> metricsForTestUsers = new HashMap<>();
         for(int user: testUsers){
-            MeasurementMetrics m = getMeasurementMetricsForUser(user, reccomendMoviesForuser(user, numberOfMovies,RecommendationType));
+            MeasurementMetrics m = getMeasurementMetricsForUser(user, reccomendMoviesForuser(user, numberOfMovies,RecommendationType, userClusterType));
             metricsForTestUsers.put(user, m);
         }
         return metricsForTestUsers;

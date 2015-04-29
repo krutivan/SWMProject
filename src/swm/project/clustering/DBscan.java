@@ -24,7 +24,7 @@ public class DBscan {
     private Object monitor;
 
     
-    DBscan(int numOfItems, double[][] matrix){
+    public DBscan(int numOfItems, double[][] matrix){
         monitor=new Object();
         similarityMatrix = matrix;
         pointsToCluster = new HashMap<>();
