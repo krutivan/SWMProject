@@ -15,7 +15,7 @@ public final class MappingConstants {
     
     //filnames
     public static final String USER_MOVIE_CLUSTERS = "datafiles//userToMovieCluster.arff";
-    public static final String USER_USER_CLUSTERS_JAC ="datafiles//useruserclustersjac.csv";
+    public static final String USER_USER_CLUSTERS_JAC ="datafiles//hierarchicalCluster.csv";
     //user cluster Type
     public static final int USER_HISTORY_CLUSTER = 0;
     public static final int USER_PROFILE_CLUSTER = 1;

@@ -35,10 +35,32 @@ public class SwmProject {
         //loadAllDataToDb();
         //findSimilarities();
         //clusterMovies();
-//       findMetricForAllBaseAndTest();
+//      findMetricForAllBaseAndTest();
+//         AllMappings m = AllMappings.getInstance();
+//         m.initUserRatings("datafiles//baseandtestmatrix//u"+1+".base","datafiles//baseandtestmatrix//u"+1+".test"); 
+//         m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
+//                m.initUsertoMovieCluster();
+//               // m.writeUserToMovieClustersToFile("ARFF");
+//                m.initUserToUserClusters();
+//                m.initUserClusterToMovieCluster();
+//                for (int j = 30; j <= 30; j+=10) {
+//                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION, MappingConstants.USER_HISTORY_CLUSTER);
+//                    String filename = "datafiles//baseandtest//measure//u"+1+"//measure"+j+".csv";
+//                    PrintWriter pw = new PrintWriter(filename);
+//                    pw.print("Userid, Precision, Recall");
+//                    for(int userId: measurements.keySet()){
+//                        pw.print("\n");
+//                        pw.print(userId);
+//                        pw.print(",");
+//                        pw.print(measurements.get(userId).getPrecision());
+//                        pw.print(",");
+//                        pw.print(measurements.get(userId).getRecall());
+//                    }
+//                    pw.close();
+//                }
       findMetricForAllBaseAndTestMatrix();
-      
-        AllMappings m = AllMappings.getInstance();
+//      findMetricForAllBaseAndTest();
+       
         
 //        m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
 //        m.initUserRatings();
@@ -77,7 +99,7 @@ public class SwmProject {
                 m.writeUserToMovieClustersToFile("ARFF");
                 m.initUserToUserClusters();
                 m.initUserClusterToMovieCluster();
-                for (int j = 50; j <= 50; j+=10) {
+                for (int j = 30; j <= 30; j+=10) {
                     HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION, MappingConstants.USER_HISTORY_CLUSTER);
                     String filename = "datafiles//baseandtest//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);
@@ -110,7 +132,7 @@ public class SwmProject {
                 m.initUserToUserClusters();
                 m.initUserClusterToMovieCluster();
                 for (int j = 10; j <= 50; j+=10) {
-                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION,MappingConstants.USER_PROFILE_CLUSTER);
+                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION,MappingConstants.USER_HISTORY_CLUSTER);
                     String filename = "datafiles//baseandtestmatrix//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);
                     pw.print("Userid, Precision, Recall");

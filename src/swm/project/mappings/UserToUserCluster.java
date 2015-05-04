@@ -41,7 +41,7 @@ class UserToUserCluster {
       if(clusteringType == MappingConstants.KMEANS)
         try {
                 userClustersJacOnHistory();
-              //clusterUserHistoryWithKmeans();
+//              clusterUserHistoryWithKmeans();
               clusterUserProfile();
               //clusterWithDBSCAN();
       } catch (Exception ex) {
@@ -134,7 +134,7 @@ class UserToUserCluster {
         userToUserClusterProfile= new HashMap<>();
         userClustersToUsersProfile = new HashMap<>();
         Reader reader;
-        reader = new FileReader(MappingConstants.USER_USER_CLUSTER_HIER);
+        reader = new FileReader(MappingConstants.USER_USER_CLUSTER_KMEANS);
         Instances instanceValues = new Instances(reader);
         
         List<String> clusterVals = new ArrayList<>(MappingConstants.NUM_OF_USER_PROFILE_CLUSTERS);
