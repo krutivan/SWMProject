@@ -78,8 +78,8 @@ class FinalScores {
             @Override
             public int compare(Integer o1, Integer o2) {
                if(movieClusterScores.get(o1)< movieClusterScores.get(o2))
-                   return -1;
-               return 1;
+                   return 1;
+               return -1;
             }
         });
     }

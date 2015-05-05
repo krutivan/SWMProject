@@ -100,7 +100,7 @@ public class SwmProject {
                 m.initUserToUserClusters();
                 m.initUserClusterToMovieCluster();
                 for (int j = 10; j <= 50; j+=10) {
-                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.HINDAWI_RECOMMENDATION, MappingConstants.USER_HISTORY_CLUSTER);
+                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.HINDAWI_RECOMMENDATION, MappingConstants.USER_HISTORY_PROFILE_CLUSTER);
                     String filename = "datafiles//baseandtest//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);
                     pw.print("Userid, Precision, Recall");
