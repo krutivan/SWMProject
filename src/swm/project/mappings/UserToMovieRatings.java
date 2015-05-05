@@ -5,17 +5,14 @@
  */
 package swm.project.mappings;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Set;
-import org.bson.Document;
 import swm.project.Consts;
-import swm.project.loadDataToDb.GetDataFromDb;
 
 /**
  *
