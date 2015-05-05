@@ -40,8 +40,8 @@ class UserToUserCluster {
     void clusterUsers(int clusteringType) {
       if(clusteringType == MappingConstants.KMEANS)
         try {
-                userClustersJacOnHistory();
-//              clusterUserHistoryWithKmeans();
+//                userClustersJacOnHistory();
+              clusterUserHistoryWithKmeans();
               clusterUserProfile();
               //clusterWithDBSCAN();
       } catch (Exception ex) {

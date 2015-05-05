@@ -5,12 +5,16 @@
  */
 package swm.project.mappings;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Set;
+import org.bson.Document;
+import swm.project.Consts;
 import swm.project.loadDataToDb.GetDataFromDb;
 
 /**
@@ -21,9 +25,28 @@ import swm.project.loadDataToDb.GetDataFromDb;
    private HashMap<Integer, HashMap<Integer,Integer>> base;
    private HashMap<Integer, HashMap<Integer,Integer>> test;
     
-   public void setUserRatingsAll(){
-       GetDataFromDb gdb = new GetDataFromDb();
-        base = gdb.getAllUserRatings();
+   public void setUserRatingsAll() throws FileNotFoundException, IOException{
+        base = new HashMap<>();
+      BufferedReader br = new BufferedReader(new FileReader(Consts.USER_RATING_FILE));
+            String inputLine;
+            
+            while((inputLine = br.readLine())!=null)
+            {
+                String [] fields = inputLine.split("\t");
+                int userId = Integer.parseInt(fields[0]);
+                int movId = Integer.parseInt(fields[1]);
+                int rating = Integer.parseInt(fields[2]);
+                HashMap<Integer,Integer> movRatings;
+                if(base.containsKey(userId))
+                    movRatings = base.get(userId);
+                else
+                    movRatings=new HashMap<>();
+
+                movRatings.put(movId, rating);
+                base.put(userId, movRatings);
+                
+            }
+        
    }
    
    /**

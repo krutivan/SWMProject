@@ -40,6 +40,10 @@ public class AllMappings {
     public  void initAll() throws IOException{
         initMovieClusters(Consts.DBSCAN_CLUSTERS);
         initUserRatings();
+        initUsertoMovieCluster();
+        writeUserToMovieClustersToFile("ARFF");
+        initUserToUserClusters();
+        initUserClusterToMovieCluster();
         
     }
     
@@ -48,9 +52,10 @@ public class AllMappings {
         movieToMovieCluster.setMovieToMovieCluster(movieClusterFile);
     }
     
-    public void initUserRatings(){
+    public void initUserRatings() throws IOException{
         userToMovieRatings = new UserToMovieRatings();
         userToMovieRatings.setUserRatingsAll();
+        
     }
     
     public void initUserRatings(String base, String test){
@@ -87,21 +92,21 @@ public class AllMappings {
             if(userClusterType == MappingConstants.USER_HISTORY_CLUSTER || userClusterType == MappingConstants.USER_PROFILE_CLUSTER)
                 return  movieReccommender.getNMovies(numberOfMovies, userId, userClusterType);
             else{
-                  userProfileRec = movieReccommender.getNMovies(numberOfMovies/2, userId, MappingConstants.USER_PROFILE_CLUSTER);
+                  userProfileRec = movieReccommender.getNMovies(numberOfMovies, userId, MappingConstants.USER_PROFILE_CLUSTER);
                   userHistoryRec = movieReccommender.getNMovies(numberOfMovies, userId, MappingConstants.USER_HISTORY_CLUSTER);
                   Set<Integer> intersection = Operations.intersection(userProfileRec, userHistoryRec);
-                  Set<Integer> union = new HashSet<Integer>(userProfileRec);
-                  union.addAll(userHistoryRec);
-//                  userProfileRec.removeAll(intersection);
-//                  userHistoryRec.removeAll(intersection);
-//                  int i=0;
-//                  while(union.size()<numberOfMovies){
-//                      if(userProfileRec.size()>i)
-//                        union.add(userProfileRec.get(i));
-//                      if(userHistoryRec.size()>i)
-//                        union.add(userHistoryRec.get(i++));
-//                  }
-                    finalRec = new ArrayList<>();
+                  Set<Integer> union = new HashSet<Integer>(intersection);
+//                  union.addAll(userHistoryRec);
+                  userProfileRec.removeAll(intersection);
+                  userHistoryRec.removeAll(intersection);
+                  int i=0;
+                  while(union.size() < numberOfMovies)
+                      union.add(userHistoryRec.get(i++));
+                  i=0;
+                  while(union.size() < numberOfMovies)
+                      union.add(userProfileRec.get(i++));
+                  
+//                    finalRec = new ArrayList<>();
 //                    finalRec.addAll(userProfileRec);
 //                    finalRec.addAll(userHistoryRec);
 //                    return finalRec;

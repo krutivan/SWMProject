@@ -93,14 +93,14 @@ public class SwmProject {
         AllMappings m = AllMappings.getInstance();
         try {
             m.initMovieClusters(Consts.DBSCAN_CLUSTERS);
-            for(int i=1;i<=1;i++){
+            for(int i=1;i<=5;i++){
                 m.initUserRatings("datafiles//baseandtest//u"+i+".base","datafiles//baseandtest//u"+i+".test"); 
                 m.initUsertoMovieCluster();
                 m.writeUserToMovieClustersToFile("ARFF");
                 m.initUserToUserClusters();
                 m.initUserClusterToMovieCluster();
-                for (int j = 30; j <= 30; j+=10) {
-                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION, MappingConstants.USER_HISTORY_CLUSTER);
+                for (int j = 10; j <= 50; j+=10) {
+                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.HINDAWI_RECOMMENDATION, MappingConstants.USER_HISTORY_CLUSTER);
                     String filename = "datafiles//baseandtest//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);
                     pw.print("Userid, Precision, Recall");
@@ -132,7 +132,7 @@ public class SwmProject {
                 m.initUserToUserClusters();
                 m.initUserClusterToMovieCluster();
                 for (int j = 10; j <= 50; j+=10) {
-                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION,MappingConstants.USER_HISTORY_CLUSTER);
+                    HashMap<Integer,MeasurementMetrics> measurements = m.getMeasurementMetricsForAllTestUsers(j,MappingConstants.MATRIX_RECOMMENDATION,MappingConstants.USER_HISTORY_PROFILE_CLUSTER);
                     String filename = "datafiles//baseandtestmatrix//measure//u"+i+"//measure"+j+".csv";
                     PrintWriter pw = new PrintWriter(filename);
                     pw.print("Userid, Precision, Recall");

@@ -52,4 +52,5 @@ public final class Consts {
     
     //filename
     public static final String DBSCAN_CLUSTERS="datafiles//MovieClusters.csv";
+    public static final String USER_RATING_FILE="datafiles//u.data";
 }
